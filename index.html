@@ -1,0 +1,86 @@
+<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Classic Return</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="scene">
+    <div class="layer" id="layer"></div>
+    <div class="overlay"></div>
+
+    <div class="container">
+        <h1>CLASSIC RETURN</h1>
+        <p>Conquer Online – Private Server</p>
+
+        <button onclick="openPopup()">Reserve Your Spot</button>
+
+        <div class="count">
+            Registered Players: <span id="count">0</span>
+        </div>
+    </div>
+</div>
+
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h3>Enter In-Game Name</h3>
+        <input type="text" id="playerName" placeholder="Your Character Name">
+        <br>
+        <button onclick="register()">Confirm</button>
+        <div class="done" id="doneMsg">? Done! You are registered</div>
+    </div>
+</div>
+
+<script>
+const layer = document.getElementById("layer");
+
+// Parallax 3D effect with mouse
+document.addEventListener("mousemove", e => {
+    const x = (window.innerWidth / 2 - e.clientX) / 40;
+    const y = (window.innerHeight / 2 - e.clientY) / 40;
+    layer.style.transform = `translateX(${x}px) translateY(${y}px) translateZ(30px) scale(1.05)`;
+});
+
+// Registration logic
+let count = localStorage.getItem("regCount");
+if (!count) {
+    count = 0;
+    localStorage.setItem("regCount", count);
+}
+document.getElementById("count").innerText = count;
+
+function openPopup() {
+    if (localStorage.getItem("registered")) {
+        alert("You already registered!");
+        return;
+    }
+    document.getElementById("popup").style.display = "flex";
+}
+
+function register() {
+    const name = document.getElementById("playerName").value.trim();
+    if (name === "") {
+        alert("Please enter your in-game name");
+        return;
+    }
+
+    localStorage.setItem("registered", "yes");
+    localStorage.setItem("playerName", name);
+
+    count++;
+    localStorage.setItem("regCount", count);
+    document.getElementById("count").innerText = count;
+
+    document.getElementById("doneMsg").style.display = "block";
+
+    setTimeout(() => {
+        document.getElementById("popup").style.display = "none";
+    }, 1500);
+}
+</script>
+
+</body>
+</html>
