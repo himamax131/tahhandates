@@ -82,24 +82,6 @@
                 </div>
             </div>
 
-            <!-- إعدادات الصنف الخاص (للمدير العام فقط) -->
-            <div id="adminSpecialItemControl" class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border border-amber-200 hidden">
-                <h2 class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">🎯 إعدادات الصنف وتارجت الصنف الخاص (للمدير العام)</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs sm:text-sm font-medium text-gray-700">اسم الصنف المستهدف</label>
-                        <input type="text" id="specialItemNameInput" placeholder="مثال: تمر عجوة فاخر" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs sm:text-sm font-medium text-gray-700">التارجت الخاص للصنف (EGP)</label>
-                        <input type="number" id="specialItemTargetInput" placeholder="تارجت الصنف الشهري" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
-                    </div>
-                    <div class="flex items-end">
-                        <button onclick="saveSpecialItemSettings()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition text-sm">حفظ إعدادات الصنف</button>
-                    </div>
-                </div>
-            </div>
-
             <!-- أقسام إدخال المبيعات اليومية -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
@@ -141,6 +123,22 @@
                                 <option value="samannoud">منفذ سمنود</option>
                             </select>
                         </div>
+
+                        <!-- إعدادات اسم الصنف وتارجته (خاص بالمدير أو متاح حسب الطلب) -->
+                        <div id="adminSpecialItemControl" class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-purple-50 p-3 rounded-lg border border-purple-100">
+                            <div>
+                                <label class="block text-xs font-semibold text-purple-900">اسم الصنف المستهدف</label>
+                                <input type="text" id="specialItemNameInput" placeholder="مثال: تمر عجوة فاخر" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-purple-900">تارجت الصنف الشهري (EGP)</label>
+                                <input type="number" id="specialItemTargetInput" placeholder="50000" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <button onclick="saveSpecialItemSettings()" class="w-full bg-purple-800 hover:bg-purple-900 text-white py-1.5 rounded-lg font-semibold transition text-xs shadow">حفظ إعدادات وتارجت الصنف 🎯</button>
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block text-xs sm:text-sm font-medium text-gray-700">تاريخ اليوم للصنف</label>
                             <input type="date" id="inputDateSpecial" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
@@ -149,7 +147,7 @@
                             <label id="specialItemLabel" class="block text-xs sm:text-sm font-medium text-purple-800 font-bold">مبيعات الصنف الخاص اليوم</label>
                             <input type="number" id="inputSpecialItemSales" placeholder="أدخل كمية أو مبيعات الصنف اليوم" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
                         </div>
-                        <div class="pt-6">
+                        <div class="pt-2">
                             <button onclick="saveSpecialSaleRecord()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-lg font-semibold transition text-sm shadow">حفظ مبيعات الصنف الخاص 💾</button>
                         </div>
                     </div>
