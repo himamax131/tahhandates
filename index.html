@@ -793,7 +793,7 @@
                 let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
                 if(existingLogIndex >= 0) {
                     data.branches[targetBranchKey].dailyLogs[existingLogIndex].specialItemAmount = specialSalesInput;
-                    data.branches[targetBranchKey].dailyLogs[existingLogKey].addedBy = currentUser.name;
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
                 } else {
                     data.branches[targetBranchKey].dailyLogs.push({
                         date: inputDate,
