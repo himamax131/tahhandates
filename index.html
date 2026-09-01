@@ -62,7 +62,7 @@
                     <h3 id="totalDailySales" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-green-600">
-                    <p class="text-xs sm:text-sm text-gray-500">إجمالي مبيعات الشهر العامة</p>
+                    <p class="text-xs sm:text-sm text-gray-500">إجمالي مبيعات الشهر الحالي</p>
                     <h3 id="totalMonthlySales" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-blue-600">
@@ -95,8 +95,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-amber-600">
-                    <h2 id="dailyControlTitle" class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">📅 تسجيل مبيعات اليوم العامة</h2>
-                    
+                    <h2 class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">📅 تسجيل مبيعات اليوم العامة</h2>
                     <div class="space-y-3">
                         <div id="branchSelectWrapper" class="hidden">
                             <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع</label>
@@ -124,7 +123,6 @@
 
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-purple-600">
                     <h2 class="text-base sm:text-lg font-bold text-purple-900 border-b pb-2">📦 تسجيل مبيعات الصنف الخاص</h2>
-                    
                     <div class="space-y-3">
                         <div id="branchSelectWrapperSpecial" class="hidden">
                             <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع للصنف</label>
@@ -153,21 +151,50 @@
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-2">
                     <h2 class="text-base sm:text-lg font-bold text-amber-900">📊 تفاصيل أداء المنافذ والأصناف الخاصة</h2>
-                    <p class="text-xs text-gray-500">اضغط على عرض السجل لمتابعة التفاصيل اليومية</p>
+                    <p class="text-xs text-gray-500">اضغط على عرض السجل لمتابعة وتعديل التفاصيل اليومية</p>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right border-collapse min-w-[700px]">
                         <thead>
                             <tr class="bg-amber-50 text-amber-900 border-b text-xs sm:text-sm">
                                 <th class="p-3">اسم المنفذ</th>
-                                <th class="p-3">مبيعات الشهر العامة</th>
+                                <th class="p-3">مبيعات الشهر الحالي</th>
                                 <th class="p-3">التارجت العام / نسبته</th>
                                 <th id="tableHeaderSpecialItem" class="p-3 text-purple-900">مبيعات الصنف الخاص</th>
                                 <th class="p-3 text-purple-900">تارجت الصنف / نسبته</th>
                                 <th class="p-3">الإجراء</th>
                             </tr>
                         </thead>
-                        <tbody id="branchesTableBody" class="text-xs sm:text-sm">
+                        <tbody id="branchesTableBody" class="text-xs sm:text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-blue-800">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-2">
+                    <h2 class="text-base sm:text-lg font-bold text-blue-900">📅 إحصائيات السنة وتقارير المبيعات الشهرية</h2>
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-semibold text-gray-600">اختر السنة:</label>
+                        <select id="selectedYearSelect" onchange="renderYearStats()" class="px-3 py-1 border rounded text-xs font-bold bg-gray-50">
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse min-w-[650px]">
+                        <thead>
+                            <tr class="bg-blue-50 text-blue-900 border-b text-xs sm:text-sm">
+                                <th class="p-3">الشهر</th>
+                                <th class="p-3">إجمالي مبيعات الشهور (EGP)</th>
+                                <th class="p-3">تارجت الشهر المحدد (EGP)</th>
+                                <th class="p-3">نسبة الإنجاز الشهري</th>
+                                <th class="p-3 text-center">إجراء (تحديد تارجت الشهر)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearlyStatsTableBody" class="text-xs sm:text-sm">
                             </tbody>
                     </table>
                 </div>
@@ -179,17 +206,17 @@
                     <button onclick="closeDetails()" class="text-gray-500 hover:text-red-600 text-xs sm:text-sm font-bold">✖ إغلاق</button>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-right border-collapse min-w-[500px]">
+                    <table class="w-full text-right border-collapse min-w-[600px]">
                         <thead>
                             <tr class="bg-gray-50 text-gray-700 border-b text-xs sm:text-sm">
-                                <th class="p-3">اليوم / التاريخ</th>
+                                <th class="p-3">التاريخ</th>
                                 <th class="p-3">المبيعات العامة</th>
                                 <th id="detailsSpecialHeader" class="p-3 text-purple-800">مبيعات الصنف الخاص</th>
                                 <th class="p-3">بواسطة</th>
+                                <th class="p-3 text-center">إجراءات (تعديل / حذف)</th>
                             </tr>
                         </thead>
-                        <tbody id="dailyRecordsTableBody" class="text-xs sm:text-sm">
-                            </tbody>
+                        <tbody id="dailyRecordsTableBody" class="text-xs sm:text-sm"></tbody>
                     </table>
                 </div>
             </div>
@@ -213,16 +240,22 @@
         }
         const db = firebase.firestore();
 
-        // بيانات المستخدمين والصلاحيات
         const users = {
             "MohamedHassan": { pass: "1212", role: "admin", branch: "all", name: "المدير العام (محمد حسن)" },
             "ahmedemad": { pass: "3212", role: "branch", branch: "mubarak", name: "منفذ مبارك (أحمد عماد)" },
             "ahmedmostafa": { pass: "4565", role: "branch", branch: "el_mashaya", name: "منفذ المشاية (أحمد مصطفى)" },
-            "ahmedgalal": { pass: "7898", role: "branch", branch: "samannoud", name: "منفذ سمنود (أحمد جلال)" }
+            "ahmedgalal": { pass: "7898", role: "branch", branch: "samannoud", name: "منفذ سمنود (ahmedgalal)" }
         };
 
         let currentUser = null;
         let globalStoreData = null;
+        let activeBranchKeyForDetails = null;
+
+        const monthsNames = [
+            "يناير (1)", "فبراير (2)", "مارس (3)", "أبريل (4)", 
+            "مايو (5)", "يونيو (6)", "يوليو (7)", "أغسطس (8)", 
+            "سبتمبر (9)", "أكتوبر (10)", "نوفمبر (11)", "ديسمبر (12)"
+        ];
 
         window.onload = function() {
             const today = new Date().toISOString().split('T')[0];
@@ -284,7 +317,7 @@
 
         async function fetchDataFromFirebase() {
             try {
-                const docRef = db.collection("store").doc("store_v_final_v4");
+                const docRef = db.collection("store").doc("store_v_final_v5");
                 const docSnap = await docRef.get();
 
                 let data = docSnap.exists ? docSnap.data() : null;
@@ -294,16 +327,23 @@
                 }
                 globalStoreData = data;
                 renderDashboardData(data);
+                renderYearStats();
+
+                if(activeBranchKeyForDetails) {
+                    viewBranchDetails(activeBranchKeyForDetails);
+                }
             } catch (error) {
                 console.error("خطأ في جلب البيانات:", error);
                 globalStoreData = getDefaultData();
                 renderDashboardData(globalStoreData);
+                renderYearStats();
             }
         }
 
         function getDefaultData() {
             return {
                 specialItem: { name: "صنف مميز", target: 50000 },
+                monthlyTargets: {}, // لتخزين تارجت كل شهر بالسنة
                 branches: {
                     mubarak: { name: "منفذ مبارك", target: 450000, dailyLogs: [] },
                     el_mashaya: { name: "منفذ المشاية", target: 400000, dailyLogs: [] },
@@ -331,8 +371,8 @@
             let totalDailyToday = 0;
             let totalMonthly = 0;
             let totalTargetVal = 0;
-            let totalSpecialSalesAll = 0;
             const todayStr = new Date().toISOString().split('T')[0];
+            const currentMonthPrefix = todayStr.substring(0, 7); // YYYY-MM
 
             for (let key in branches) {
                 let b = branches[key];
@@ -343,8 +383,10 @@
                 let calculatedSpecialMonthly = 0;
 
                 b.dailyLogs.forEach(log => {
-                    calculatedMonthly += Number(log.amount || 0);
-                    calculatedSpecialMonthly += Number(log.specialItemAmount || 0);
+                    if(log.date && log.date.startsWith(currentMonthPrefix)) {
+                        calculatedMonthly += Number(log.amount || 0);
+                        calculatedSpecialMonthly += Number(log.specialItemAmount || 0);
+                    }
                     if(log.date === todayStr) {
                         todaySale += Number(log.amount || 0);
                     }
@@ -357,7 +399,6 @@
                 totalDailyToday += todaySale;
                 totalMonthly += calculatedMonthly;
                 totalTargetVal += Number(b.target || 0);
-                totalSpecialSalesAll += calculatedSpecialMonthly;
 
                 tbody.innerHTML += `
                     <tr class="border-b hover:bg-gray-50">
@@ -391,6 +432,84 @@
             document.getElementById('totalSpecialItemTarget').innerText = (specialItem.target || 0) + ' EGP';
         }
 
+        // حساب وعرض إحصائيات السنة الشهرية (يناير - ديسمبر)
+        function renderYearStats() {
+            if(!globalStoreData) return;
+            const selectedYear = document.getElementById('selectedYearSelect').value;
+            const branches = globalStoreData.branches || {};
+            const monthlyTargets = globalStoreData.monthlyTargets || {};
+
+            let yearlyTbody = document.getElementById('yearlyStatsTableBody');
+            yearlyTbody.innerHTML = '';
+
+            // تجميع المبيعات لكل شهر من الشهور الـ 12 من كل الفروع
+            let monthSales = Array(12).fill(0);
+
+            for(let key in branches) {
+                let b = branches[key];
+                if(b.dailyLogs) {
+                    b.dailyLogs.forEach(log => {
+                        if(log.date && log.date.startsWith(selectedYear)) {
+                            let monthIndex = parseInt(log.date.substring(5, 7)) - 1;
+                            if(monthIndex >= 0 && monthIndex < 12) {
+                                monthSales[monthIndex] += Number(log.amount || 0);
+                            }
+                        }
+                    });
+                }
+            }
+
+            for(let i = 0; i < 12; i++) {
+                let monthKey = `${selectedYear}-${String(i + 1).padStart(2, '0')}`;
+                let mSales = monthSales[i];
+                let mTarget = Number(monthlyTargets[monthKey]) || 0;
+                let mPercentage = mTarget > 0 ? ((mSales / mTarget) * 100).toFixed(1) : 0;
+
+                let actionButton = currentUser.role === 'admin' 
+                    ? `<button onclick="setMonthTarget('${monthKey}')" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition">تعديل تارجت الشهر 🎯</button>`
+                    : `<span class="text-gray-400 text-xs">للمدير فقط</span>`;
+
+                yearlyTbody.innerHTML += `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-3 font-semibold text-blue-900">📅 ${monthsNames[i]} ${selectedYear}</td>
+                        <td class="p-3 text-green-700 font-bold">${mSales} EGP</td>
+                        <td class="p-3 text-blue-700 font-semibold">${mTarget > 0 ? mTarget + ' EGP' : 'غير محدد'}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded text-xs font-bold ${mPercentage >= 100 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">
+                                ${mPercentage}%
+                            </span>
+                        </td>
+                        <td class="p-3 text-center">${actionButton}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        // تحديد تارجت شهر معين (للمدير العام)
+        async function setMonthTarget(monthKey) {
+            let currentVal = (globalStoreData.monthlyTargets && globalStoreData.monthlyTargets[monthKey]) || '';
+            let newTarget = prompt(`أدخل التارجت المطلوب لشهر (${monthKey}):`, currentVal);
+            
+            if(newTarget === null) return;
+            let targetNum = Number(newTarget);
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v5");
+                let docSnap = await docRef.get();
+                let data = docSnap.exists ? docSnap.data() : getDefaultData();
+
+                if(!data.monthlyTargets) data.monthlyTargets = {};
+                data.monthlyTargets[monthKey] = targetNum;
+
+                await docRef.set(data, { merge: true });
+                alert('تم تحديث تارجت الشهر بنجاح!');
+                fetchDataFromFirebase();
+            } catch (error) {
+                console.error("خطأ في حفظ تارجت الشهر:", error);
+                alert('حدث خطأ أثناء الحفظ.');
+            }
+        }
+
         async function saveSpecialItemSettings() {
             let itemName = document.getElementById('specialItemNameInput').value.trim();
             let itemTarget = Number(document.getElementById('specialItemTargetInput').value) || 0;
@@ -401,7 +520,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v4");
+                const docRef = db.collection("store").doc("store_v_final_v5");
                 await docRef.set({
                     specialItem: { name: itemName, target: itemTarget }
                 }, { merge: true });
@@ -410,11 +529,12 @@
                 fetchDataFromFirebase();
             } catch (error) {
                 console.error("خطأ في حفظ الصنف:", error);
-                alert('حدث خطأ أثناء حفظ بيانات الصنف، تأكد من اتصال الإنترنت وقواعد الـ Firestore.');
+                alert('حدث خطأ أثناء حفظ بيانات الصنف.');
             }
         }
 
         function viewBranchDetails(branchKey) {
+            activeBranchKeyForDetails = branchKey;
             const branch = globalStoreData.branches[branchKey];
             document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام - ${branch.name || branchKey}`;
             
@@ -422,7 +542,7 @@
             detailsTbody.innerHTML = '';
 
             if(!branch.dailyLogs || branch.dailyLogs.length === 0) {
-                detailsTbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">لا توجد مبيعات مسجلة لهذا الفرع بعد.</td></tr>`;
+                detailsTbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">لا توجد مبيعات مسجلة لهذا الفرع بعد.</td></tr>`;
             } else {
                 branch.dailyLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
@@ -433,6 +553,10 @@
                             <td class="p-3 text-green-700 font-bold">${log.amount || 0} EGP</td>
                             <td class="p-3 text-purple-700 font-bold">${log.specialItemAmount || 0} EGP</td>
                             <td class="p-3 text-gray-500 text-xs sm:text-sm">${log.addedBy || 'مسؤول الفرع'}</td>
+                            <td class="p-3 text-center space-x-1 space-x-reverse">
+                                <button onclick="editRecord('${branchKey}', '${log.date}', ${log.amount || 0}, ${log.specialItemAmount || 0})" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-2.5 py-1 rounded text-xs font-bold transition">تعديل ✏️</button>
+                                <button onclick="deleteRecord('${branchKey}', '${log.date}')" class="bg-red-100 text-red-800 hover:bg-red-200 px-2.5 py-1 rounded text-xs font-bold transition">حذف ❌</button>
+                            </td>
                         </tr>
                     `;
                 });
@@ -443,10 +567,59 @@
         }
 
         function closeDetails() {
+            activeBranchKeyForDetails = null;
             document.getElementById('branchDetailsSection').classList.add('hidden');
         }
 
-        // حفظ مبيعات اليوم العامة وحدها
+        function editRecord(branchKey, dateStr, amount, specialAmount) {
+            if (currentUser.role !== 'admin' && currentUser.branch !== branchKey) {
+                alert('عذراً، يمكنك تعديل سجلات فرعك فقط!');
+                return;
+            }
+
+            if(currentUser.role === 'admin') {
+                document.getElementById('targetBranchSelect').value = branchKey;
+                document.getElementById('targetBranchSelectSpecial').value = branchKey;
+            }
+
+            document.getElementById('inputDate').value = dateStr;
+            document.getElementById('inputDailySales').value = amount;
+
+            document.getElementById('inputDateSpecial').value = dateStr;
+            document.getElementById('inputSpecialItemSales').value = specialAmount;
+
+            alert(`تم جلب بيانات تاريخ (${dateStr}) في خانات الإدخال بالأعلى. قم بتعديل ما تحتاجه ثم اضغط على زر حفظ.`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function deleteRecord(branchKey, dateStr) {
+            if (currentUser.role !== 'admin' && currentUser.branch !== branchKey) {
+                alert('عذراً، يمكنك حذف سجلات فرعك فقط!');
+                return;
+            }
+
+            if(!confirm(`هل أنت متأكد من حذف سجل تاريخ (${dateStr}) نهائياً؟`)) {
+                return;
+            }
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v5");
+                let docSnap = await docRef.get();
+                if (!docSnap.exists) return;
+
+                let data = docSnap.data();
+                if(data.branches && data.branches[branchKey] && data.branches[branchKey].dailyLogs) {
+                    data.branches[branchKey].dailyLogs = data.branches[branchKey].dailyLogs.filter(l => l.date !== dateStr);
+                    await docRef.set(data, { merge: true });
+                    alert('تم حذف السجل بنجاح!');
+                    fetchDataFromFirebase();
+                }
+            } catch (error) {
+                console.error("خطأ أثناء الحذف:", error);
+                alert('حدث خطأ أثناء محاولة الحذف.');
+            }
+        }
+
         async function saveDailySaleRecord() {
             let targetBranchKey = currentUser.role === 'admin' 
                 ? document.getElementById('targetBranchSelect').value 
@@ -464,7 +637,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v4");
+                const docRef = db.collection("store").doc("store_v_final_v5");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
@@ -491,17 +664,16 @@
                 }
 
                 await docRef.set(data, { merge: true });
-                alert('تم حفظ مبيعات اليوم العامة بنجاح!');
+                alert('تم حفظ وتحديث مبيعات اليوم العامة بنجاح!');
                 document.getElementById('inputDailySales').value = '';
                 if(currentUser.role === 'admin') document.getElementById('inputMonthlyTarget').value = '';
                 fetchDataFromFirebase();
             } catch (error) {
                 console.error("خطأ أثناء الحفظ:", error);
-                alert('حدث خطأ أثناء الحفظ، تأكد من قواعد الـ Firestore (Rules).');
+                alert('حدث خطأ أثناء الحفظ.');
             }
         }
 
-        // حفظ مبيعات الصنف الخاص وحدها
         async function saveSpecialSaleRecord() {
             let targetBranchKey = currentUser.role === 'admin' 
                 ? document.getElementById('targetBranchSelectSpecial').value 
@@ -516,7 +688,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v4");
+                const docRef = db.collection("store").doc("store_v_final_v5");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
@@ -539,12 +711,12 @@
                 }
 
                 await docRef.set(data, { merge: true });
-                alert('تم حفظ مبيعات الصنف الخاص بنجاح!');
+                alert('تم حفظ وتحديث مبيعات الصنف الخاص بنجاح!');
                 document.getElementById('inputSpecialItemSales').value = '';
                 fetchDataFromFirebase();
             } catch (error) {
                 console.error("خطأ أثناء حفظ الصنف:", error);
-                alert('حدث خطأ أثناء الحفظ، تأكد من قواعد الـ Firestore (Rules).');
+                alert('حدث خطأ أثناء الحفظ.');
             }
         }
     </script>
