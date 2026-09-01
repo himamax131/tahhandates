@@ -77,7 +77,7 @@
                     <h3 id="totalMonthlyTarget" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-purple-600">
-                    <p class="text-xs sm:text-sm text-gray-500">إجمالي تارجت الصنف الخاص</p>
+                    <p class="text-xs sm:text-sm text-gray-500">إجمالي تارجت الأصناف الخاصة</p>
                     <h3 id="totalSpecialItemTarget" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
             </div>
@@ -117,25 +117,25 @@
                     <div class="space-y-3">
                         <div id="branchSelectWrapperSpecial" class="hidden">
                             <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع للصنف</label>
-                            <select id="targetBranchSelectSpecial" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
+                            <select id="targetBranchSelectSpecial" onchange="onSpecialBranchChange()" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
                                 <option value="mubarak">منفذ مبارك</option>
                                 <option value="el_mashaya">منفذ المشاية</option>
                                 <option value="samannoud">منفذ سمنود</option>
                             </select>
                         </div>
 
-                        <!-- إعدادات اسم الصنف وتارجته (خاص بالمدير أو متاح حسب الطلب) -->
+                        <!-- إعدادات اسم الصنف وتارجته لكل فرع على حدة -->
                         <div id="adminSpecialItemControl" class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-purple-50 p-3 rounded-lg border border-purple-100">
                             <div>
-                                <label class="block text-xs font-semibold text-purple-900">اسم الصنف المستهدف</label>
-                                <input type="text" id="specialItemNameInput" placeholder="مثال: تمر عجوة فاخر" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
+                                <label class="block text-xs font-semibold text-purple-900">اسم الصنف للفرع</label>
+                                <input type="text" id="specialItemNameInput" placeholder="مثال: معمول" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-purple-900">تارجت الصنف الشهري (EGP)</label>
-                                <input type="number" id="specialItemTargetInput" placeholder="50000" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
+                                <input type="number" id="specialItemTargetInput" placeholder="30000" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
                             </div>
                             <div class="sm:col-span-2">
-                                <button onclick="saveSpecialItemSettings()" class="w-full bg-purple-800 hover:bg-purple-900 text-white py-1.5 rounded-lg font-semibold transition text-xs shadow">حفظ إعدادات وتارجت الصنف 🎯</button>
+                                <button onclick="saveSpecialItemSettings()" class="w-full bg-purple-800 hover:bg-purple-900 text-white py-1.5 rounded-lg font-semibold transition text-xs shadow">حفظ اسم وتارجت صنف هذا الفرع 🎯</button>
                             </div>
                         </div>
 
@@ -144,7 +144,7 @@
                             <input type="date" id="inputDateSpecial" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
                         </div>
                         <div>
-                            <label id="specialItemLabel" class="block text-xs sm:text-sm font-medium text-purple-800 font-bold">مبيعات الصنف الخاص اليوم</label>
+                            <label id="specialItemLabel" class="block text-xs sm:text-sm font-medium text-purple-800 font-bold">مبيعات الصنف اليوم</label>
                             <input type="number" id="inputSpecialItemSales" placeholder="أدخل كمية أو مبيعات الصنف اليوم" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
                         </div>
                         <div class="pt-2">
@@ -337,7 +337,7 @@
 
         async function fetchDataFromFirebase() {
             try {
-                const docRef = db.collection("store").doc("store_v_final_v6");
+                const docRef = db.collection("store").doc("store_v_final_v7");
                 const docSnap = await docRef.get();
 
                 let data = docSnap.exists ? docSnap.data() : null;
@@ -348,6 +348,7 @@
                 globalStoreData = data;
                 renderDashboardData(data);
                 renderYearStats();
+                onSpecialBranchChange();
 
                 if(activeBranchKeyForDetails) {
                     viewBranchDetails(activeBranchKeyForDetails);
@@ -362,29 +363,30 @@
 
         function getDefaultData() {
             return {
-                specialItem: { name: "صنف مميز", target: 50000 },
                 monthlyBranchTargets: {},
                 branches: {
-                    mubarak: { name: "منفذ مبارك", dailyLogs: [] },
-                    el_mashaya: { name: "منفذ المشاية", dailyLogs: [] },
-                    samannoud: { name: "منفذ سمنود", dailyLogs: [] }
+                    mubarak: { name: "منفذ مبارك", specialItemName: "صنف مميز", specialItemTarget: 30000, dailyLogs: [] },
+                    el_mashaya: { name: "منفذ المشاية", specialItemName: "صنف مميز", specialItemTarget: 30000, dailyLogs: [] },
+                    samannoud: { name: "منفذ سمنود", specialItemName: "صنف مميز", specialItemTarget: 30000, dailyLogs: [] }
                 }
             };
         }
 
+        function onSpecialBranchChange() {
+            if(!globalStoreData || !globalStoreData.branches) return;
+            let targetBranchKey = currentUser.role === 'admin' 
+                ? document.getElementById('targetBranchSelectSpecial').value 
+                : currentUser.branch;
+
+            let branchObj = globalStoreData.branches[targetBranchKey] || {};
+            document.getElementById('specialItemNameInput').value = branchObj.specialItemName || '';
+            document.getElementById('specialItemTargetInput').value = branchObj.specialItemTarget || '';
+            document.getElementById('specialItemLabel').innerText = `مبيعات (${branchObj.specialItemName || 'الصنف'}) اليوم`;
+        }
+
         function renderDashboardData(data) {
             const branches = data.branches || {};
-            const specialItem = data.specialItem || { name: "صنف مميز", target: 0 };
             const monthlyBranchTargets = data.monthlyBranchTargets || {};
-
-            document.getElementById('specialItemLabel').innerText = `مبيعات (${specialItem.name}) اليوم`;
-            document.getElementById('tableHeaderSpecialItem').innerText = `مبيعات (${specialItem.name})`;
-            document.getElementById('detailsSpecialHeader').innerText = `مبيعات (${specialItem.name})`;
-            
-            if (currentUser && currentUser.role === 'admin') {
-                document.getElementById('specialItemNameInput').value = specialItem.name !== "صنف مميز" ? specialItem.name : '';
-                document.getElementById('specialItemTargetInput').value = specialItem.target || '';
-            }
 
             let tbody = document.getElementById('branchesTableBody');
             tbody.innerHTML = '';
@@ -392,6 +394,7 @@
             let totalDailyToday = 0;
             let totalMonthly = 0;
             let totalTargetVal = 0;
+            let totalSpecialTargetVal = 0;
             const todayStr = new Date().toISOString().split('T')[0];
             const currentMonthPrefix = todayStr.substring(0, 7);
 
@@ -417,16 +420,18 @@
                 let branchCurrentMonthTarget = Number(monthlyBranchTargets[currentMonthTargetKey]) || 0;
 
                 let percentage = branchCurrentMonthTarget > 0 ? ((calculatedMonthly / branchCurrentMonthTarget) * 100).toFixed(1) : 0;
-                let branchSpecialTarget = (Number(specialItem.target) / 3);
+                let branchSpecialTarget = Number(b.specialItemTarget) || 0;
                 let specialPercentage = branchSpecialTarget > 0 ? ((calculatedSpecialMonthly / branchSpecialTarget) * 100).toFixed(1) : 0;
+                let sName = b.specialItemName || 'صنف خاص';
 
                 totalDailyToday += todaySale;
                 totalMonthly += calculatedMonthly;
                 totalTargetVal += branchCurrentMonthTarget;
+                totalSpecialTargetVal += branchSpecialTarget;
 
                 tbody.innerHTML += `
                     <tr class="border-b hover:bg-gray-50">
-                        <td class="p-3 font-semibold text-amber-900">${b.name || key}</td>
+                        <td class="p-3 font-semibold text-amber-900">${b.name || key} <span class="block text-xs text-purple-700 font-normal">(${sName})</span></td>
                         <td class="p-3 text-green-700 font-bold">${calculatedMonthly} EGP</td>
                         <td class="p-3">
                             <span class="text-blue-700 font-semibold">${branchCurrentMonthTarget} EGP</span> 
@@ -436,7 +441,7 @@
                         </td>
                         <td class="p-3 text-purple-700 font-bold">${calculatedSpecialMonthly} EGP</td>
                         <td class="p-3">
-                            <span class="text-purple-600 font-semibold">${Math.round(branchSpecialTarget)} EGP</span>
+                            <span class="text-purple-600 font-semibold">${branchSpecialTarget} EGP</span>
                             <span class="px-2 py-0.5 rounded text-xs font-bold ${specialPercentage >= 100 ? 'bg-green-100 text-green-800' : 'bg-purple-100 text-purple-800'} mr-1">
                                 ${specialPercentage}%
                             </span>
@@ -453,7 +458,7 @@
             document.getElementById('totalDailySales').innerText = totalDailyToday + ' EGP';
             document.getElementById('totalMonthlySales').innerText = totalMonthly + ' EGP';
             document.getElementById('totalMonthlyTarget').innerText = totalTargetVal + ' EGP';
-            document.getElementById('totalSpecialItemTarget').innerText = (specialItem.target || 0) + ' EGP';
+            document.getElementById('totalSpecialItemTarget').innerText = totalSpecialTargetVal + ' EGP';
         }
 
         function renderYearStats() {
@@ -518,7 +523,7 @@
             let targetNum = Number(newTarget);
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v6");
+                const docRef = db.collection("store").doc("store_v_final_v7");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
@@ -535,6 +540,10 @@
         }
 
         async function saveSpecialItemSettings() {
+            let targetBranchKey = currentUser.role === 'admin' 
+                ? document.getElementById('targetBranchSelectSpecial').value 
+                : currentUser.branch;
+
             let itemName = document.getElementById('specialItemNameInput').value.trim();
             let itemTarget = Number(document.getElementById('specialItemTargetInput').value) || 0;
 
@@ -544,12 +553,19 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v6");
-                await docRef.set({
-                    specialItem: { name: itemName, target: itemTarget }
-                }, { merge: true });
+                const docRef = db.collection("store").doc("store_v_final_v7");
+                let docSnap = await docRef.get();
+                let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
-                alert('تم حفظ إعدادات الصنف وتارجته بنجاح!');
+                if(!data.branches[targetBranchKey]) {
+                    data.branches[targetBranchKey] = {};
+                }
+
+                data.branches[targetBranchKey].specialItemName = itemName;
+                data.branches[targetBranchKey].specialItemTarget = itemTarget;
+
+                await docRef.set(data, { merge: true });
+                alert('تم حفظ إعدادات الصنف وتارجته لهذا الفرع بنجاح!');
                 fetchDataFromFirebase();
             } catch (error) {
                 console.error("خطأ في حفظ الصنف:", error);
@@ -560,7 +576,7 @@
         function viewBranchDetails(branchKey) {
             activeBranchKeyForDetails = branchKey;
             const branch = globalStoreData.branches[branchKey];
-            document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام - ${branch.name || branchKey}`;
+            document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام - ${branch.name || branchKey} (${branch.specialItemName || 'صنف خاص'})`;
             
             let detailsTbody = document.getElementById('dailyRecordsTableBody');
             detailsTbody.innerHTML = '';
@@ -604,6 +620,7 @@
             if(currentUser.role === 'admin') {
                 document.getElementById('targetBranchSelect').value = branchKey;
                 document.getElementById('targetBranchSelectSpecial').value = branchKey;
+                onSpecialBranchChange();
             }
 
             document.getElementById('inputDate').value = dateStr;
@@ -627,7 +644,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v6");
+                const docRef = db.collection("store").doc("store_v_final_v7");
                 let docSnap = await docRef.get();
                 if (!docSnap.exists) return;
 
@@ -658,7 +675,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v6");
+                const docRef = db.collection("store").doc("store_v_final_v7");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
@@ -704,7 +721,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v6");
+                const docRef = db.collection("store").doc("store_v_final_v7");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
