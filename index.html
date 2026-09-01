@@ -66,7 +66,7 @@
                     <h3 id="totalMonthlySales" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-blue-600">
-                    <p class="text-xs sm:text-sm text-gray-500">إجمالي تارجت الشهر العام</p>
+                    <p class="text-xs sm:text-sm text-gray-500">إجمالي تارجت الشهور للفروع</p>
                     <h3 id="totalMonthlyTarget" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-purple-600">
@@ -113,11 +113,9 @@
                             <label class="block text-xs sm:text-sm font-medium text-gray-700">مبيعات اليوم العامة (EGP)</label>
                             <input type="number" id="inputDailySales" placeholder="أدخل إجمالي مبيعات اليوم" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
                         </div>
-                        <div id="targetInputWrapper" class="hidden">
-                            <label class="block text-xs sm:text-sm font-medium text-gray-700">التارجت الشهري العام للفرع</label>
-                            <input type="number" id="inputMonthlyTarget" placeholder="التارجت الشهري" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
+                        <div class="pt-3">
+                            <button onclick="saveDailySaleRecord()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg font-semibold transition text-sm shadow">حفظ مبيعات اليوم 💾</button>
                         </div>
-                        <button onclick="saveDailySaleRecord()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg font-semibold transition text-sm shadow">حفظ مبيعات اليوم 💾</button>
                     </div>
                 </div>
 
@@ -150,7 +148,7 @@
 
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-2">
-                    <h2 class="text-base sm:text-lg font-bold text-amber-900">📊 تفاصيل أداء المنافذ والأصناف الخاصة</h2>
+                    <h2 class="text-base sm:text-lg font-bold text-amber-900">📊 تفاصيل أداء المنافذ والأصناف الخاصة (الشهر الحالي)</h2>
                     <p class="text-xs text-gray-500">اضغط على عرض السجل لمتابعة وتعديل التفاصيل اليومية</p>
                 </div>
                 <div class="overflow-x-auto">
@@ -159,7 +157,7 @@
                             <tr class="bg-amber-50 text-amber-900 border-b text-xs sm:text-sm">
                                 <th class="p-3">اسم المنفذ</th>
                                 <th class="p-3">مبيعات الشهر الحالي</th>
-                                <th class="p-3">التارجت العام / نسبته</th>
+                                <th class="p-3">تارجت الشهر / نسبته</th>
                                 <th id="tableHeaderSpecialItem" class="p-3 text-purple-900">مبيعات الصنف الخاص</th>
                                 <th class="p-3 text-purple-900">تارجت الصنف / نسبته</th>
                                 <th class="p-3">الإجراء</th>
@@ -171,31 +169,42 @@
             </div>
 
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-blue-800">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-2">
-                    <h2 class="text-base sm:text-lg font-bold text-blue-900">📅 إحصائيات السنة وتقارير المبيعات الشهرية</h2>
-                    <div class="flex items-center gap-2">
-                        <label class="text-xs font-semibold text-gray-600">اختر السنة:</label>
-                        <select id="selectedYearSelect" onchange="renderYearStats()" class="px-3 py-1 border rounded text-xs font-bold bg-gray-50">
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                            <option value="2028">2028</option>
-                        </select>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-3">
+                    <h2 class="text-base sm:text-lg font-bold text-blue-900">📅 إحصائيات السنة وتحديد تارجت الفروع الشهري</h2>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label class="text-xs font-semibold text-gray-600">السنة:</label>
+                            <select id="selectedYearSelect" onchange="renderYearStats()" class="px-3 py-1 border rounded text-xs font-bold bg-gray-50">
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <label class="text-xs font-semibold text-gray-600">الفرع:</label>
+                            <select id="selectedYearBranchSelect" onchange="renderYearStats()" class="px-3 py-1 border rounded text-xs font-bold bg-gray-50">
+                                <option value="mubarak">منفذ مبارك</option>
+                                <option value="el_mashaya">منفذ المشاية</option>
+                                <option value="samannoud">منفذ سمنود</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 
+                <p class="text-xs text-gray-500">اختر الفرع والسنة بالأعلى، ثم اضغط على (تعديل تارجت الشهر 🎯) لتحديد المستهدف المالي لكل شهر بدقة.</p>
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-right border-collapse min-w-[650px]">
                         <thead>
                             <tr class="bg-blue-50 text-blue-900 border-b text-xs sm:text-sm">
                                 <th class="p-3">الشهر</th>
-                                <th class="p-3">إجمالي مبيعات الشهور (EGP)</th>
-                                <th class="p-3">تارجت الشهر المحدد (EGP)</th>
+                                <th class="p-3">إجمالي مبيعات الفرع (EGP)</th>
+                                <th class="p-3">تارجت الشهر للفرع (EGP)</th>
                                 <th class="p-3">نسبة الإنجاز الشهري</th>
                                 <th class="p-3 text-center">إجراء (تحديد تارجت الشهر)</th>
                             </tr>
                         </thead>
-                        <tbody id="yearlyStatsTableBody" class="text-xs sm:text-sm">
-                            </tbody>
+                        <tbody id="yearlyStatsTableBody" class="text-xs sm:text-sm"></tbody>
                     </table>
                 </div>
             </div>
@@ -244,7 +253,7 @@
             "MohamedHassan": { pass: "1212", role: "admin", branch: "all", name: "المدير العام (محمد حسن)" },
             "ahmedemad": { pass: "3212", role: "branch", branch: "mubarak", name: "منفذ مبارك (أحمد عماد)" },
             "ahmedmostafa": { pass: "4565", role: "branch", branch: "el_mashaya", name: "منفذ المشاية (أحمد مصطفى)" },
-            "ahmedgalal": { pass: "7898", role: "branch", branch: "samannoud", name: "منفذ سمنود (ahmedgalal)" }
+            "ahmedgalal": { pass: "7898", role: "branch", branch: "samannoud", name: "منفذ سمنود (أحمد جلال)" }
         };
 
         let currentUser = null;
@@ -304,12 +313,10 @@
                 document.getElementById('adminSpecialItemControl').classList.remove('hidden');
                 document.getElementById('branchSelectWrapper').classList.remove('hidden');
                 document.getElementById('branchSelectWrapperSpecial').classList.remove('hidden');
-                document.getElementById('targetInputWrapper').classList.remove('hidden');
             } else {
                 document.getElementById('adminSpecialItemControl').classList.add('hidden');
                 document.getElementById('branchSelectWrapper').classList.add('hidden');
                 document.getElementById('branchSelectWrapperSpecial').classList.add('hidden');
-                document.getElementById('targetInputWrapper').classList.add('hidden');
             }
 
             fetchDataFromFirebase();
@@ -317,7 +324,7 @@
 
         async function fetchDataFromFirebase() {
             try {
-                const docRef = db.collection("store").doc("store_v_final_v5");
+                const docRef = db.collection("store").doc("store_v_final_v6");
                 const docSnap = await docRef.get();
 
                 let data = docSnap.exists ? docSnap.data() : null;
@@ -343,11 +350,11 @@
         function getDefaultData() {
             return {
                 specialItem: { name: "صنف مميز", target: 50000 },
-                monthlyTargets: {}, // لتخزين تارجت كل شهر بالسنة
+                monthlyBranchTargets: {}, // لتخزين { "2026-03_mubarak": 50000 }
                 branches: {
-                    mubarak: { name: "منفذ مبارك", target: 450000, dailyLogs: [] },
-                    el_mashaya: { name: "منفذ المشاية", target: 400000, dailyLogs: [] },
-                    samannoud: { name: "منفذ سمنود", target: 350000, dailyLogs: [] }
+                    mubarak: { name: "منفذ مبارك", dailyLogs: [] },
+                    el_mashaya: { name: "منفذ المشاية", dailyLogs: [] },
+                    samannoud: { name: "منفذ سمنود", dailyLogs: [] }
                 }
             };
         }
@@ -355,6 +362,7 @@
         function renderDashboardData(data) {
             const branches = data.branches || {};
             const specialItem = data.specialItem || { name: "صنف مميز", target: 0 };
+            const monthlyBranchTargets = data.monthlyBranchTargets || {};
 
             document.getElementById('specialItemLabel').innerText = `مبيعات (${specialItem.name}) اليوم`;
             document.getElementById('tableHeaderSpecialItem').innerText = `مبيعات (${specialItem.name})`;
@@ -392,20 +400,24 @@
                     }
                 });
 
-                let percentage = b.target > 0 ? ((calculatedMonthly / b.target) * 100).toFixed(1) : 0;
+                // جلب تارجت الشهر الحالي لهذا الفرع
+                let currentMonthTargetKey = `${currentMonthPrefix}_${key}`;
+                let branchCurrentMonthTarget = Number(monthlyBranchTargets[currentMonthTargetKey]) || 0;
+
+                let percentage = branchCurrentMonthTarget > 0 ? ((calculatedMonthly / branchCurrentMonthTarget) * 100).toFixed(1) : 0;
                 let branchSpecialTarget = (Number(specialItem.target) / 3);
                 let specialPercentage = branchSpecialTarget > 0 ? ((calculatedSpecialMonthly / branchSpecialTarget) * 100).toFixed(1) : 0;
 
                 totalDailyToday += todaySale;
                 totalMonthly += calculatedMonthly;
-                totalTargetVal += Number(b.target || 0);
+                totalTargetVal += branchCurrentMonthTarget;
 
                 tbody.innerHTML += `
                     <tr class="border-b hover:bg-gray-50">
                         <td class="p-3 font-semibold text-amber-900">${b.name || key}</td>
                         <td class="p-3 text-green-700 font-bold">${calculatedMonthly} EGP</td>
                         <td class="p-3">
-                            <span class="text-blue-700 font-semibold">${b.target || 0} EGP</span> 
+                            <span class="text-blue-700 font-semibold">${branchCurrentMonthTarget} EGP</span> 
                             <span class="px-2 py-0.5 rounded text-xs font-bold ${percentage >= 100 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'} mr-1">
                                 ${percentage}%
                             </span>
@@ -432,41 +444,42 @@
             document.getElementById('totalSpecialItemTarget').innerText = (specialItem.target || 0) + ' EGP';
         }
 
-        // حساب وعرض إحصائيات السنة الشهرية (يناير - ديسمبر)
+        // عرض إحصائيات السنة وتحديد تارجت كل شهر حسب الفرع المحدد
         function renderYearStats() {
             if(!globalStoreData) return;
             const selectedYear = document.getElementById('selectedYearSelect').value;
+            const selectedBranchKey = document.getElementById('selectedYearBranchSelect').value;
             const branches = globalStoreData.branches || {};
-            const monthlyTargets = globalStoreData.monthlyTargets || {};
+            const monthlyBranchTargets = globalStoreData.monthlyBranchTargets || {};
 
             let yearlyTbody = document.getElementById('yearlyStatsTableBody');
             yearlyTbody.innerHTML = '';
 
-            // تجميع المبيعات لكل شهر من الشهور الـ 12 من كل الفروع
+            let branchObj = branches[selectedBranchKey] || { dailyLogs: [] };
             let monthSales = Array(12).fill(0);
 
-            for(let key in branches) {
-                let b = branches[key];
-                if(b.dailyLogs) {
-                    b.dailyLogs.forEach(log => {
-                        if(log.date && log.date.startsWith(selectedYear)) {
-                            let monthIndex = parseInt(log.date.substring(5, 7)) - 1;
-                            if(monthIndex >= 0 && monthIndex < 12) {
-                                monthSales[monthIndex] += Number(log.amount || 0);
-                            }
+            if(branchObj.dailyLogs) {
+                branchObj.dailyLogs.forEach(log => {
+                    if(log.date && log.date.startsWith(selectedYear)) {
+                        let monthIndex = parseInt(log.date.substring(5, 7)) - 1;
+                        if(monthIndex >= 0 && monthIndex < 12) {
+                            monthSales[monthIndex] += Number(log.amount || 0);
                         }
-                    });
-                }
+                    }
+                });
             }
 
             for(let i = 0; i < 12; i++) {
-                let monthKey = `${selectedYear}-${String(i + 1).padStart(2, '0')}`;
+                let monthNum = String(i + 1).padStart(2, '0');
+                let monthKey = `${selectedYear}-${monthNum}`;
+                let targetMapKey = `${monthKey}_${selectedBranchKey}`;
+
                 let mSales = monthSales[i];
-                let mTarget = Number(monthlyTargets[monthKey]) || 0;
+                let mTarget = Number(monthlyBranchTargets[targetMapKey]) || 0;
                 let mPercentage = mTarget > 0 ? ((mSales / mTarget) * 100).toFixed(1) : 0;
 
                 let actionButton = currentUser.role === 'admin' 
-                    ? `<button onclick="setMonthTarget('${monthKey}')" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition">تعديل تارجت الشهر 🎯</button>`
+                    ? `<button onclick="setMonthBranchTarget('${targetMapKey}', '${monthsNames[i]}', '${selectedYear}')" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition">تعديل تارجت الشهر 🎯</button>`
                     : `<span class="text-gray-400 text-xs">للمدير فقط</span>`;
 
                 yearlyTbody.innerHTML += `
@@ -485,240 +498,25 @@
             }
         }
 
-        // تحديد تارجت شهر معين (للمدير العام)
-        async function setMonthTarget(monthKey) {
-            let currentVal = (globalStoreData.monthlyTargets && globalStoreData.monthlyTargets[monthKey]) || '';
-            let newTarget = prompt(`أدخل التارجت المطلوب لشهر (${monthKey}):`, currentVal);
+        // تحديد تارجت شهر معين لفرع معين (للمدير العام)
+        async function setMonthBranchTarget(targetMapKey, monthName, year) {
+            let currentVal = (globalStoreData.monthlyBranchTargets && globalStoreData.monthlyBranchTargets[targetMapKey]) || '';
+            let branchName = document.getElementById('selectedYearBranchSelect').options[document.getElementById('selectedYearBranchSelect').selectedIndex].text;
             
+            let newTarget = prompt(`أدخل التارجت المستهدف لـ (${branchName}) في شهر ${monthName} سنة ${year}:`, currentVal);
             if(newTarget === null) return;
             let targetNum = Number(newTarget);
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v5");
+                const docRef = db.collection("store").doc("store_v_final_v6");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
-                if(!data.monthlyTargets) data.monthlyTargets = {};
-                data.monthlyTargets[monthKey] = targetNum;
+                if(!data.monthlyBranchTargets) data.monthlyBranchTargets = {};
+                data.monthlyBranchTargets[targetMapKey] = targetNum;
 
                 await docRef.set(data, { merge: true });
-                alert('تم تحديث تارجت الشهر بنجاح!');
+                alert('تم تحديث تارجت الشهر للفرع بنجاح!');
                 fetchDataFromFirebase();
             } catch (error) {
-                console.error("خطأ في حفظ تارجت الشهر:", error);
-                alert('حدث خطأ أثناء الحفظ.');
-            }
-        }
-
-        async function saveSpecialItemSettings() {
-            let itemName = document.getElementById('specialItemNameInput').value.trim();
-            let itemTarget = Number(document.getElementById('specialItemTargetInput').value) || 0;
-
-            if(!itemName) {
-                alert('يرجى كتابة اسم الصنف أولاً!');
-                return;
-            }
-
-            try {
-                const docRef = db.collection("store").doc("store_v_final_v5");
-                await docRef.set({
-                    specialItem: { name: itemName, target: itemTarget }
-                }, { merge: true });
-
-                alert('تم حفظ إعدادات الصنف وتارجته بنجاح!');
-                fetchDataFromFirebase();
-            } catch (error) {
-                console.error("خطأ في حفظ الصنف:", error);
-                alert('حدث خطأ أثناء حفظ بيانات الصنف.');
-            }
-        }
-
-        function viewBranchDetails(branchKey) {
-            activeBranchKeyForDetails = branchKey;
-            const branch = globalStoreData.branches[branchKey];
-            document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام - ${branch.name || branchKey}`;
-            
-            let detailsTbody = document.getElementById('dailyRecordsTableBody');
-            detailsTbody.innerHTML = '';
-
-            if(!branch.dailyLogs || branch.dailyLogs.length === 0) {
-                detailsTbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">لا توجد مبيعات مسجلة لهذا الفرع بعد.</td></tr>`;
-            } else {
-                branch.dailyLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                branch.dailyLogs.forEach((log) => {
-                    detailsTbody.innerHTML += `
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="p-3 font-medium text-gray-800">📅 ${log.date}</td>
-                            <td class="p-3 text-green-700 font-bold">${log.amount || 0} EGP</td>
-                            <td class="p-3 text-purple-700 font-bold">${log.specialItemAmount || 0} EGP</td>
-                            <td class="p-3 text-gray-500 text-xs sm:text-sm">${log.addedBy || 'مسؤول الفرع'}</td>
-                            <td class="p-3 text-center space-x-1 space-x-reverse">
-                                <button onclick="editRecord('${branchKey}', '${log.date}', ${log.amount || 0}, ${log.specialItemAmount || 0})" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-2.5 py-1 rounded text-xs font-bold transition">تعديل ✏️</button>
-                                <button onclick="deleteRecord('${branchKey}', '${log.date}')" class="bg-red-100 text-red-800 hover:bg-red-200 px-2.5 py-1 rounded text-xs font-bold transition">حذف ❌</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-
-            document.getElementById('branchDetailsSection').classList.remove('hidden');
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }
-
-        function closeDetails() {
-            activeBranchKeyForDetails = null;
-            document.getElementById('branchDetailsSection').classList.add('hidden');
-        }
-
-        function editRecord(branchKey, dateStr, amount, specialAmount) {
-            if (currentUser.role !== 'admin' && currentUser.branch !== branchKey) {
-                alert('عذراً، يمكنك تعديل سجلات فرعك فقط!');
-                return;
-            }
-
-            if(currentUser.role === 'admin') {
-                document.getElementById('targetBranchSelect').value = branchKey;
-                document.getElementById('targetBranchSelectSpecial').value = branchKey;
-            }
-
-            document.getElementById('inputDate').value = dateStr;
-            document.getElementById('inputDailySales').value = amount;
-
-            document.getElementById('inputDateSpecial').value = dateStr;
-            document.getElementById('inputSpecialItemSales').value = specialAmount;
-
-            alert(`تم جلب بيانات تاريخ (${dateStr}) في خانات الإدخال بالأعلى. قم بتعديل ما تحتاجه ثم اضغط على زر حفظ.`);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function deleteRecord(branchKey, dateStr) {
-            if (currentUser.role !== 'admin' && currentUser.branch !== branchKey) {
-                alert('عذراً، يمكنك حذف سجلات فرعك فقط!');
-                return;
-            }
-
-            if(!confirm(`هل أنت متأكد من حذف سجل تاريخ (${dateStr}) نهائياً؟`)) {
-                return;
-            }
-
-            try {
-                const docRef = db.collection("store").doc("store_v_final_v5");
-                let docSnap = await docRef.get();
-                if (!docSnap.exists) return;
-
-                let data = docSnap.data();
-                if(data.branches && data.branches[branchKey] && data.branches[branchKey].dailyLogs) {
-                    data.branches[branchKey].dailyLogs = data.branches[branchKey].dailyLogs.filter(l => l.date !== dateStr);
-                    await docRef.set(data, { merge: true });
-                    alert('تم حذف السجل بنجاح!');
-                    fetchDataFromFirebase();
-                }
-            } catch (error) {
-                console.error("خطأ أثناء الحذف:", error);
-                alert('حدث خطأ أثناء محاولة الحذف.');
-            }
-        }
-
-        async function saveDailySaleRecord() {
-            let targetBranchKey = currentUser.role === 'admin' 
-                ? document.getElementById('targetBranchSelect').value 
-                : currentUser.branch;
-
-            let inputDate = document.getElementById('inputDate').value;
-            let dailySalesInput = Number(document.getElementById('inputDailySales').value) || 0;
-            let targetInput = currentUser.role === 'admin' 
-                ? Number(document.getElementById('inputMonthlyTarget').value) || 0 
-                : 0;
-
-            if(!inputDate) {
-                alert('يرجى اختيار التاريخ أولاً!');
-                return;
-            }
-
-            try {
-                const docRef = db.collection("store").doc("store_v_final_v5");
-                let docSnap = await docRef.get();
-                let data = docSnap.exists ? docSnap.data() : getDefaultData();
-
-                if (!data.branches) data.branches = getDefaultData().branches;
-                if(!data.branches[targetBranchKey].dailyLogs) {
-                    data.branches[targetBranchKey].dailyLogs = [];
-                }
-
-                let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
-                if(existingLogIndex >= 0) {
-                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].amount = dailySalesInput;
-                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
-                } else {
-                    data.branches[targetBranchKey].dailyLogs.push({
-                        date: inputDate,
-                        amount: dailySalesInput,
-                        specialItemAmount: 0,
-                        addedBy: currentUser.name
-                    });
-                }
-
-                if (currentUser.role === 'admin' && targetInput > 0) {
-                    data.branches[targetBranchKey].target = targetInput;
-                }
-
-                await docRef.set(data, { merge: true });
-                alert('تم حفظ وتحديث مبيعات اليوم العامة بنجاح!');
-                document.getElementById('inputDailySales').value = '';
-                if(currentUser.role === 'admin') document.getElementById('inputMonthlyTarget').value = '';
-                fetchDataFromFirebase();
-            } catch (error) {
-                console.error("خطأ أثناء الحفظ:", error);
-                alert('حدث خطأ أثناء الحفظ.');
-            }
-        }
-
-        async function saveSpecialSaleRecord() {
-            let targetBranchKey = currentUser.role === 'admin' 
-                ? document.getElementById('targetBranchSelectSpecial').value 
-                : currentUser.branch;
-
-            let inputDate = document.getElementById('inputDateSpecial').value;
-            let specialSalesInput = Number(document.getElementById('inputSpecialItemSales').value) || 0;
-
-            if(!inputDate) {
-                alert('يرجى اختيار تاريخ الصنف أولاً!');
-                return;
-            }
-
-            try {
-                const docRef = db.collection("store").doc("store_v_final_v5");
-                let docSnap = await docRef.get();
-                let data = docSnap.exists ? docSnap.data() : getDefaultData();
-
-                if (!data.branches) data.branches = getDefaultData().branches;
-                if(!data.branches[targetBranchKey].dailyLogs) {
-                    data.branches[targetBranchKey].dailyLogs = [];
-                }
-
-                let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
-                if(existingLogIndex >= 0) {
-                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].specialItemAmount = specialSalesInput;
-                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
-                } else {
-                    data.branches[targetBranchKey].dailyLogs.push({
-                        date: inputDate,
-                        amount: 0,
-                        specialItemAmount: specialSalesInput,
-                        addedBy: currentUser.name
-                    });
-                }
-
-                await docRef.set(data, { merge: true });
-                alert('تم حفظ وتحديث مبيعات الصنف الخاص بنجاح!');
-                document.getElementById('inputSpecialItemSales').value = '';
-                fetchDataFromFirebase();
-            } catch (error) {
-                console.error("خطأ أثناء حفظ الصنف:", error);
-                alert('حدث خطأ أثناء الحفظ.');
-            }
-        }
-    </script>
-</body>
-</html>
+                console
