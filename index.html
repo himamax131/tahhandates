@@ -82,21 +82,13 @@
                 </div>
             </div>
 
-            <!-- أقسام إدخال المبيعات اليومية -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- أقسام إدخال المبيعات اليومية (تظهر للمناديب فقط وتختفي عند المدير العام) -->
+            <div id="salesEntryContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
                 <!-- 1. تسجيل المبيعات اليومية العامة -->
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-amber-600">
                     <h2 class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">📅 تسجيل مبيعات اليوم العامة</h2>
                     <div class="space-y-3">
-                        <div id="branchSelectWrapper" class="hidden">
-                            <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع</label>
-                            <select id="targetBranchSelect" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
-                                <option value="mubarak">منفذ مبارك</option>
-                                <option value="el_mashaya">منفذ المشاية</option>
-                                <option value="samannoud">منفذ سمنود</option>
-                            </select>
-                        </div>
                         <div>
                             <label class="block text-xs sm:text-sm font-medium text-gray-700">تاريخ اليوم</label>
                             <input type="date" id="inputDate" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
@@ -115,30 +107,6 @@
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-purple-600">
                     <h2 class="text-base sm:text-lg font-bold text-purple-900 border-b pb-2">📦 تسجيل مبيعات الصنف الخاص</h2>
                     <div class="space-y-3">
-                        <div id="branchSelectWrapperSpecial" class="hidden">
-                            <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع للصنف</label>
-                            <select id="targetBranchSelectSpecial" onchange="onSpecialBranchChange()" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
-                                <option value="mubarak">منفذ مبارك</option>
-                                <option value="el_mashaya">منفذ المشاية</option>
-                                <option value="samannoud">منفذ سمنود</option>
-                            </select>
-                        </div>
-
-                        <!-- إعدادات اسم الصنف وتارجته لكل فرع على حدة -->
-                        <div id="adminSpecialItemControl" class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-purple-50 p-3 rounded-lg border border-purple-100">
-                            <div>
-                                <label class="block text-xs font-semibold text-purple-900">اسم الصنف للفرع</label>
-                                <input type="text" id="specialItemNameInput" placeholder="مثال: معمول" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-purple-900">تارجت الصنف الشهري (EGP)</label>
-                                <input type="number" id="specialItemTargetInput" placeholder="30000" class="mt-1 w-full px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-purple-500 text-xs bg-white">
-                            </div>
-                            <div class="sm:col-span-2">
-                                <button onclick="saveSpecialItemSettings()" class="w-full bg-purple-800 hover:bg-purple-900 text-white py-1.5 rounded-lg font-semibold transition text-xs shadow">حفظ اسم وتارجت صنف هذا الفرع 🎯</button>
-                            </div>
-                        </div>
-
                         <div>
                             <label class="block text-xs sm:text-sm font-medium text-gray-700">تاريخ اليوم للصنف</label>
                             <input type="date" id="inputDateSpecial" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
@@ -153,6 +121,35 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- لوحة تحكم المدير العام لتحديد وتعديل تارجت الأصناف الخاصة لكل فرع -->
+            <div id="adminSpecialTargetBox" class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-purple-800 hidden">
+                <div class="border-b pb-2">
+                    <h2 class="text-base sm:text-lg font-bold text-purple-900">🎯 إدارة وتحديد اسم وتارجت الصنف الخاص لكل فرع (خاص بالمدير العام)</h2>
+                    <p class="text-xs text-gray-500 mt-1">اختر الفرع المراد تعديل صنفها وتارجتها الشهري، ثم احفظ التعديلات.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end bg-purple-50 p-4 rounded-xl border border-purple-100">
+                    <div>
+                        <label class="block text-xs font-bold text-purple-900 mb-1">اختر الفرع المستهدف</label>
+                        <select id="adminTargetBranchSelect" onchange="onAdminBranchSelectChange()" class="w-full px-3 py-2 border rounded-lg text-sm bg-white font-semibold">
+                            <option value="mubarak">منفذ مبارك</option>
+                            <option value="el_mashaya">منفذ المشاية</option>
+                            <option value="samannoud">منفذ سمنود</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-purple-900 mb-1">اسم الصنف للفرع</label>
+                        <input type="text" id="specialItemNameInput" placeholder="مثال: معمول" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-purple-900 mb-1">تارجت الصنف الشهري (EGP)</label>
+                        <input type="number" id="specialItemTargetInput" placeholder="30000" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                    </div>
+                    <div class="sm:col-span-3">
+                        <button onclick="saveSpecialItemSettings()" class="w-full bg-purple-800 hover:bg-purple-900 text-white py-2.5 rounded-lg font-bold transition text-sm shadow">حفظ اسم وتارجت صنف هذا الفرع 🎯</button>
+                    </div>
+                </div>
             </div>
 
             <!-- جدول مقارنة الفروع الثلاثة بالشهر الحالي -->
@@ -323,13 +320,13 @@
             document.getElementById('userInfoBadge').innerText = currentUser.name;
 
             if (currentUser.role === 'admin') {
-                document.getElementById('adminSpecialItemControl').classList.remove('hidden');
-                document.getElementById('branchSelectWrapper').classList.remove('hidden');
-                document.getElementById('branchSelectWrapperSpecial').classList.remove('hidden');
+                // المدير العام: نخفي أزرار إدخال المبيعات اليومية ونظهر له صندوق تعديل التارجت والأصناف
+                document.getElementById('salesEntryContainer').classList.add('hidden');
+                document.getElementById('adminSpecialTargetBox').classList.remove('hidden');
             } else {
-                document.getElementById('adminSpecialItemControl').classList.add('hidden');
-                document.getElementById('branchSelectWrapper').classList.add('hidden');
-                document.getElementById('branchSelectWrapperSpecial').classList.add('hidden');
+                // مسؤول الفرع: نُظهر له أدوات الإدخال الخاصة بفرعه فقط
+                document.getElementById('salesEntryContainer').classList.remove('hidden');
+                document.getElementById('adminSpecialTargetBox').classList.add('hidden');
             }
 
             fetchDataFromFirebase();
@@ -337,7 +334,7 @@
 
         async function fetchDataFromFirebase() {
             try {
-                const docRef = db.collection("store").doc("store_v_final_v7");
+                const docRef = db.collection("store").doc("store_v_final_v8");
                 const docSnap = await docRef.get();
 
                 let data = docSnap.exists ? docSnap.data() : null;
@@ -348,7 +345,7 @@
                 globalStoreData = data;
                 renderDashboardData(data);
                 renderYearStats();
-                onSpecialBranchChange();
+                onAdminBranchSelectChange();
 
                 if(activeBranchKeyForDetails) {
                     viewBranchDetails(activeBranchKeyForDetails);
@@ -372,16 +369,12 @@
             };
         }
 
-        function onSpecialBranchChange() {
+        function onAdminBranchSelectChange() {
             if(!globalStoreData || !globalStoreData.branches) return;
-            let targetBranchKey = currentUser.role === 'admin' 
-                ? document.getElementById('targetBranchSelectSpecial').value 
-                : currentUser.branch;
-
-            let branchObj = globalStoreData.branches[targetBranchKey] || {};
+            let selectedKey = document.getElementById('adminTargetBranchSelect').value;
+            let branchObj = globalStoreData.branches[selectedKey] || {};
             document.getElementById('specialItemNameInput').value = branchObj.specialItemName || '';
             document.getElementById('specialItemTargetInput').value = branchObj.specialItemTarget || '';
-            document.getElementById('specialItemLabel').innerText = `مبيعات (${branchObj.specialItemName || 'الصنف'}) اليوم`;
         }
 
         function renderDashboardData(data) {
@@ -523,7 +516,7 @@
             let targetNum = Number(newTarget);
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v7");
+                const docRef = db.collection("store").doc("store_v_final_v8");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
@@ -540,10 +533,7 @@
         }
 
         async function saveSpecialItemSettings() {
-            let targetBranchKey = currentUser.role === 'admin' 
-                ? document.getElementById('targetBranchSelectSpecial').value 
-                : currentUser.branch;
-
+            let targetBranchKey = document.getElementById('adminTargetBranchSelect').value;
             let itemName = document.getElementById('specialItemNameInput').value.trim();
             let itemTarget = Number(document.getElementById('specialItemTargetInput').value) || 0;
 
@@ -553,7 +543,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v7");
+                const docRef = db.collection("store").doc("store_v_final_v8");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
@@ -618,9 +608,8 @@
             }
 
             if(currentUser.role === 'admin') {
-                document.getElementById('targetBranchSelect').value = branchKey;
-                document.getElementById('targetBranchSelectSpecial').value = branchKey;
-                onSpecialBranchChange();
+                alert('المدير العام يتابع السجلات ويعدل التارجت، بينما تعديل المبيعات اليومية يتم من خلال حساب الفرع المختص.');
+                return;
             }
 
             document.getElementById('inputDate').value = dateStr;
@@ -644,7 +633,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v7");
+                const docRef = db.collection("store").doc("store_v_final_v8");
                 let docSnap = await docRef.get();
                 if (!docSnap.exists) return;
 
@@ -662,10 +651,7 @@
         }
 
         async function saveDailySaleRecord() {
-            let targetBranchKey = currentUser.role === 'admin' 
-                ? document.getElementById('targetBranchSelect').value 
-                : currentUser.branch;
-
+            let targetBranchKey = currentUser.branch;
             let inputDate = document.getElementById('inputDate').value;
             let dailySalesInput = Number(document.getElementById('inputDailySales').value) || 0;
 
@@ -675,7 +661,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v7");
+                const docRef = db.collection("store").doc("store_v_final_v8");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
@@ -708,10 +694,7 @@
         }
 
         async function saveSpecialSaleRecord() {
-            let targetBranchKey = currentUser.role === 'admin' 
-                ? document.getElementById('targetBranchSelectSpecial').value 
-                : currentUser.branch;
-
+            let targetBranchKey = currentUser.branch;
             let inputDate = document.getElementById('inputDateSpecial').value;
             let specialSalesInput = Number(document.getElementById('inputSpecialItemSales').value) || 0;
 
@@ -721,7 +704,7 @@
             }
 
             try {
-                const docRef = db.collection("store").doc("store_v_final_v7");
+                const docRef = db.collection("store").doc("store_v_final_v8");
                 let docSnap = await docRef.get();
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
