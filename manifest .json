@@ -1,0 +1,13 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "fullscreen",
+  "name": "TahhanManegar",
+  "orientation": "any",
+  "scope": "https://himamax131.github.io/tahhandates/",
+  "short_name": "TahhanManegar",
+  "start_url": "https://himamax131.github.io/tahhandates/",
+  "theme_color": "#ffffff",
+  "id": "TahhanManegar",
+  "lang": "ar"
+}
