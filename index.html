@@ -14,6 +14,27 @@
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen">
 
+    <div id="loginSection" class="flex items-center justify-center min-h-screen bg-amber-50 hidden">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-96 border border-amber-200">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold text-amber-900">🌴 تمور الطحان</h1>
+                <p class="text-sm text-gray-500 mt-1">نظام إدارة منافذ البيع</p>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">اسم المستخدم</label>
+                    <input type="text" id="username" required class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">كلمة المرور</label>
+                    <input type="password" id="password" required class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                </div>
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg font-semibold transition">تسجيل الدخول</button>
+                <p id="loginError" class="text-red-500 text-xs text-center hidden mt-2">اسم المستخدم أو كلمة المرور غير صحيحة!</p>
+            </form>
+        </div>
+    </div>
+
     <div id="dashboardSection" class="min-h-screen flex flex-col">
         <header class="bg-amber-900 text-white shadow-md p-4 flex justify-between items-center">
             <div class="flex items-center space-x-3 space-x-reverse">
@@ -22,6 +43,7 @@
             </div>
             <div class="flex items-center space-x-4 space-x-reverse">
                 <span id="userInfo" class="bg-amber-800 px-3 py-1 rounded-full text-sm">المدير العام (محمد حسن)</span>
+                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition font-semibold">تسجيل الخروج 🚪</button>
             </div>
         </header>
 
@@ -144,7 +166,33 @@
             const dateInput = document.getElementById('inputDate');
             if(dateInput) dateInput.value = today;
 
-            fetchDataFromFirebase();
+            // التحقق من حالة تسجيل الخروج المخزنة
+            if (localStorage.getItem('tahstore_logged_out') === 'true') {
+                showLoginScreen();
+            } else {
+                fetchDataFromFirebase();
+            }
+        }
+
+        function logout() {
+            localStorage.setItem('tahstore_logged_out', 'true');
+            showLoginScreen();
+        }
+
+        function showLoginScreen() {
+            document.getElementById('dashboardSection').classList.add('hidden');
+            let loginSec = document.getElementById('loginSection');
+            loginSec.classList.remove('hidden');
+            // إظهار حقول تسجيل الدخول لو المستخدم حابب يدخل بكلمة مرور
+            loginSec.innerHTML = `
+                <div class="bg-white p-8 rounded-2xl shadow-xl w-96 border border-amber-200">
+                    <div class="text-center mb-6">
+                        <h1 class="text-2xl font-bold text-amber-900">🌴 تمور الطحان</h1>
+                        <p class="text-sm text-gray-500 mt-1">تم تسجيل الخروج بنجاح</p>
+                    </div>
+                    <button onclick="location.reload()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg font-semibold transition">العودة للوحة التحكم</button>
+                </div>
+            `;
         }
 
         async function fetchDataFromFirebase() {
@@ -243,7 +291,7 @@
             if(!branch.dailyLogs || branch.dailyLogs.length === 0) {
                 detailsTbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-500">لا توجد مبيعات مسجلة لهذا الفرع بعد.</td></tr>`;
             } else {
-                branch.dailyLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+                branch.dailyLogs.sort((a, b) => new Date(b.date) - new Date(b.date));
                 
                 branch.dailyLogs.forEach((log) => {
                     detailsTbody.innerHTML += `
@@ -302,6 +350,7 @@
                 }
 
                 await docRef.set(data, { merge: true });
+                localStorage.removeItem('tahstore_logged_out');
                 alert('تم حفظ السجل اليومي وتحديث البيانات بنجاح على Firebase!');
                 
                 document.getElementById('inputDailySales').value = '';
