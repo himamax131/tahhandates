@@ -14,36 +14,14 @@
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen">
 
-    <div id="loginSection" class="flex items-center justify-center min-h-screen bg-amber-50">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-96 border border-amber-200">
-            <div class="text-center mb-6">
-                <h1 class="text-2xl font-bold text-amber-900">🌴 تمور الطحان</h1>
-                <p class="text-sm text-gray-500 mt-1">نظام إدارة منافذ البيع</p>
-            </div>
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">اسم المستخدم</label>
-                    <input type="text" id="username" required class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">كلمة المرور</label>
-                    <input type="password" id="password" required class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                </div>
-                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg font-semibold transition">تسجيل الدخول</button>
-                <p id="loginError" class="text-red-500 text-xs text-center hidden mt-2">اسم المستخدم أو كلمة المرور غير صحيحة!</p>
-            </form>
-        </div>
-    </div>
-
-    <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
+    <div id="dashboardSection" class="min-h-screen flex flex-col">
         <header class="bg-amber-900 text-white shadow-md p-4 flex justify-between items-center">
             <div class="flex items-center space-x-3 space-x-reverse">
                 <span class="text-2xl">🌴</span>
                 <h1 class="text-xl font-bold">تمور الطحان - إدارة المنافذ</h1>
             </div>
             <div class="flex items-center space-x-4 space-x-reverse">
-                <span id="userInfo" class="bg-amber-800 px-3 py-1 rounded-full text-sm"></span>
-                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition">تسجيل الخروج</button>
+                <span id="userInfo" class="bg-amber-800 px-3 py-1 rounded-full text-sm">المدير العام (محمد حسن)</span>
             </div>
         </header>
 
@@ -71,21 +49,29 @@
             <div id="branchControlPanel" class="bg-white p-6 rounded-xl shadow space-y-4">
                 <h2 id="controlPanelTitle" class="text-lg font-bold text-amber-900 border-b pb-2">إضافة مبيعات يومية وتحديد التارجت</h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">اختر الفرع</label>
+                        <select id="targetBranchSelect" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500">
+                            <option value="mubarak">منفذ مبارك</option>
+                            <option value="el_mashaya">منفذ المشاية</option>
+                            <option value="samannoud">منفذ سمنود</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">تاريخ اليوم</label>
                         <input type="date" id="inputDate" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">مبيعات هذا اليوم (EGP)</label>
-                        <input type="number" id="inputDailySales" placeholder="أدخل مبلغ مبيعات اليوم" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500">
+                        <input type="number" id="inputDailySales" placeholder="أدخل المبلغ" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">التارجت الشهري للفرع (EGP)</label>
-                        <input type="number" id="inputMonthlyTarget" placeholder="تارجت الشهر" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500">
+                        <label class="block text-sm font-medium text-gray-700">التارجت الشهري (EGP)</label>
+                        <input type="number" id="inputMonthlyTarget" placeholder="التارجت" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500">
                     </div>
                     <div class="flex items-end">
-                        <button onclick="saveDailySaleRecord()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg font-semibold transition">إضافة السجل وحفظه</button>
+                        <button onclick="saveDailySaleRecord()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg font-semibold transition">حفظ السجل</button>
                     </div>
                 </div>
             </div>
@@ -100,7 +86,6 @@
                         <thead>
                             <tr class="bg-amber-50 text-amber-900 border-b">
                                 <th class="p-3">اسم المنفذ</th>
-                                <th class="p-3">المسؤول</th>
                                 <th class="p-3">إجمالي الشهر الحالي</th>
                                 <th class="p-3">التارجت الشهري</th>
                                 <th class="p-3">نسبة التحقيق</th>
@@ -124,7 +109,7 @@
                             <tr class="bg-gray-50 text-gray-700 border-b">
                                 <th class="p-3">اليوم / التاريخ</th>
                                 <th class="p-3">المبلغ المحقق</th>
-                                <th class="p-3">المسؤول عن الإضافة</th>
+                                <th class="p-3">بواسطة</th>
                             </tr>
                         </thead>
                         <tbody id="dailyRecordsTableBody">
@@ -152,57 +137,12 @@
         }
         const db = firebase.firestore();
 
-        const users = {
-            "MohamedHassan": { pass: "1212", role: "admin", branch: "all", name: "المدير العام (محمد حسن)" },
-            "ahmedemad": { pass: "3212", role: "branch", branch: "mubarak", name: "منفذ مبارك (أحمد عماد)" },
-            "ahmedmostafa": { pass: "4565", role: "branch", branch: "el_mashaya", name: "منفذ المشاية (أحمد مصطفى)" },
-            "ahmedgalal": { pass: "7898", role: "branch", branch: "samannoud", name: "منفذ سمنود (أحمد جلال)" }
-        };
-
-        let currentUser = null;
         let globalStoreData = null;
 
         window.onload = function() {
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('inputDate');
             if(dateInput) dateInput.value = today;
-
-            const savedUser = localStorage.getItem('tahstore_user');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                initDashboard();
-            }
-        }
-
-        function handleLogin(event) {
-            event.preventDefault();
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value.trim();
-
-            if (users[u] && users[u].pass === p) {
-                currentUser = { username: u, ...users[u] };
-                localStorage.setItem('tahstore_user', JSON.stringify(currentUser));
-                initDashboard();
-            } else {
-                document.getElementById('loginError').classList.remove('hidden');
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('tahstore_user');
-            location.reload();
-        }
-
-        function initDashboard() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('dashboardSection').classList.remove('hidden');
-            document.getElementById('userInfo').innerText = `${currentUser.name}`;
-
-            if (currentUser.role === 'branch') {
-                document.getElementById('controlPanelTitle').innerText = `إدخال مبيعات يومية وتارجت: ${currentUser.name}`;
-            } else {
-                document.getElementById('controlPanelTitle').innerText = `لوحة المدير العام - متابعة كافة الفروع والتفاصيل اليومية`;
-            }
 
             fetchDataFromFirebase();
         }
@@ -215,7 +155,6 @@
                 let data = docSnap.exists ? docSnap.data() : null;
                 if (!data || !data.branches) {
                     data = getDefaultData();
-                    // استخدام merge لضمان عدم مسح البيانات القديمة الموجودة مسبقاً في الدوكيومنت
                     await docRef.set(data, { merge: true });
                 }
                 globalStoreData = data;
@@ -270,7 +209,6 @@
                 tbody.innerHTML += `
                     <tr class="border-b hover:bg-gray-50">
                         <td class="p-3 font-semibold text-amber-900">${b.name || key}</td>
-                        <td class="p-3 text-gray-600">${getManagerName(key)}</td>
                         <td class="p-3 text-green-700 font-bold">${branchMonthly} EGP</td>
                         <td class="p-3 text-blue-700">${b.target || 0} EGP</td>
                         <td class="p-3">
@@ -295,13 +233,6 @@
             document.getElementById('totalAchievementPercentage').innerText = generalPercentage + '%';
         }
 
-        function getManagerName(branchKey) {
-            for (let u in users) {
-                if (users[u].branch === branchKey) return users[u].name;
-            }
-            return "غير محدد";
-        }
-
         function viewBranchDetails(branchKey) {
             const branch = globalStoreData.branches[branchKey];
             document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام (من 1 إلى 31) - ${branch.name || branchKey}`;
@@ -319,7 +250,7 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="p-3 font-medium text-gray-800">📅 ${log.date}</td>
                             <td class="p-3 text-green-700 font-bold">${log.amount} EGP</td>
-                            <td class="p-3 text-gray-500 text-sm">${log.addedBy || 'مسؤول الفرع'}</td>
+                            <td class="p-3 text-gray-500 text-sm">${log.addedBy || 'المدير العام'}</td>
                         </tr>
                     `;
                 });
@@ -334,6 +265,7 @@
         }
 
         async function saveDailySaleRecord() {
+            let targetBranchKey = document.getElementById('targetBranchSelect').value;
             let inputDate = document.getElementById('inputDate').value;
             let dailySalesInput = Number(document.getElementById('inputDailySales').value) || 0;
             let targetInput = Number(document.getElementById('inputMonthlyTarget').value) || 0;
@@ -349,14 +281,6 @@
                 let data = docSnap.exists ? docSnap.data() : getDefaultData();
 
                 if (!data.branches) data.branches = getDefaultData().branches;
-
-                let targetBranchKey = '';
-                if (currentUser.role === 'branch') {
-                    targetBranchKey = currentUser.branch;
-                } else if (currentUser.role === 'admin') {
-                    targetBranchKey = 'samannoud'; // فرع افتراضي للمدير العام في حال الإضافة السريعة
-                }
-
                 if(!data.branches[targetBranchKey].dailyLogs) {
                     data.branches[targetBranchKey].dailyLogs = [];
                 }
@@ -364,12 +288,12 @@
                 let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
                 if(existingLogIndex >= 0) {
                     data.branches[targetBranchKey].dailyLogs[existingLogIndex].amount = dailySalesInput;
-                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = "المدير العام (محمد حسن)";
                 } else {
                     data.branches[targetBranchKey].dailyLogs.push({
                         date: inputDate,
                         amount: dailySalesInput,
-                        addedBy: currentUser.name
+                        addedBy: "المدير العام (محمد حسن)"
                     });
                 }
 
@@ -377,16 +301,12 @@
                     data.branches[targetBranchKey].target = targetInput;
                 }
 
-                // استخدام { merge: true } للحفاظ على الحقول القديمة وعدم مسحها
                 await docRef.set(data, { merge: true });
                 alert('تم حفظ السجل اليومي وتحديث البيانات بنجاح على Firebase!');
                 
                 document.getElementById('inputDailySales').value = '';
                 document.getElementById('inputMonthlyTarget').value = '';
                 fetchDataFromFirebase();
-            }, error => {
-                console.error("خطأ أثناء الحفظ:", error);
-                alert('حدث خطأ أثناء الحفظ، تأكد من اتصال الإنترنت وصلاحيات قاعدة البيانات.');
             } catch (error) {
                 console.error("خطأ أثناء الحفظ:", error);
                 alert('حدث خطأ أثناء الحفظ، تأكد من اتصال الإنترنت وصلاحيات قاعدة البيانات.');
