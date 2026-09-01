@@ -123,33 +123,90 @@
 
             </div>
 
-            <!-- لوحة تحكم المدير العام لتحديد وتعديل تارجت الأصناف الخاصة لكل فرع -->
-            <div id="adminSpecialTargetBox" class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-purple-800 hidden">
-                <div class="border-b pb-2">
-                    <h2 class="text-base sm:text-lg font-bold text-purple-900">🎯 إدارة وتحديد اسم وتارجت الصنف الخاص لكل فرع (خاص بالمدير العام)</h2>
-                    <p class="text-xs text-gray-500 mt-1">اختر الفرع المراد تعديل صنفها وتارجتها الشهري، ثم احفظ التعديلات.</p>
+            <!-- لوحة تحكم المدير العام لإدارة وتحديد تارجت الشهور وتارجت الأصناف الخاصة -->
+            <div id="adminTargetsControlBox" class="grid grid-cols-1 lg:grid-cols-2 gap-6 hidden">
+                
+                <!-- 1. تحديد تارجت الشهر للفرع -->
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-blue-800">
+                    <div class="border-b pb-2">
+                        <h2 class="text-base sm:text-lg font-bold text-blue-900">🎯 تحديد وتعديل تارجت الشهور للفروع</h2>
+                        <p class="text-xs text-gray-500 mt-1">اختر الفرع والشهر المستهدف وحدد قيمته المالية.</p>
+                    </div>
+                    <div class="space-y-3 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <div>
+                            <label class="block text-xs font-bold text-blue-900 mb-1">اختر الفرع</label>
+                            <select id="adminMonthTargetBranch" class="w-full px-3 py-2 border rounded-lg text-sm bg-white font-semibold">
+                                <option value="mubarak">منفذ مبارك</option>
+                                <option value="el_mashaya">منفذ المشاية</option>
+                                <option value="samannoud">منفذ سمنود</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-bold text-blue-900 mb-1">السنة</label>
+                                <select id="adminTargetYear" class="w-full px-3 py-2 border rounded-lg text-sm bg-white font-semibold">
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-blue-900 mb-1">الشهر</label>
+                                <select id="adminTargetMonth" class="w-full px-3 py-2 border rounded-lg text-sm bg-white font-semibold">
+                                    <option value="01">يناير (1)</option>
+                                    <option value="02">فبراير (2)</option>
+                                    <option value="03">مارس (3)</option>
+                                    <option value="04">أبريل (4)</option>
+                                    <option value="05">مايو (5)</option>
+                                    <option value="06">يونيو (6)</option>
+                                    <option value="07">يوليو (7)</option>
+                                    <option value="08">أغسطس (8)</option>
+                                    <option value="09">سبتمبر (9)</option>
+                                    <option value="10">أكتوبر (10)</option>
+                                    <option value="11">نوفمبر (11)</option>
+                                    <option value="12">ديسمبر (12)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-blue-900 mb-1">قيمة تارجت الشهر (EGP)</label>
+                            <input type="number" id="adminMonthTargetValueInput" placeholder="مثال: 150000" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <button onclick="saveAdminMonthTarget()" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-2.5 rounded-lg font-bold transition text-sm shadow">حفظ تارجت هذا الشهر للفرع 🎯</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end bg-purple-50 p-4 rounded-xl border border-purple-100">
-                    <div>
-                        <label class="block text-xs font-bold text-purple-900 mb-1">اختر الفرع المستهدف</label>
-                        <select id="adminTargetBranchSelect" onchange="onAdminBranchSelectChange()" class="w-full px-3 py-2 border rounded-lg text-sm bg-white font-semibold">
-                            <option value="mubarak">منفذ مبارك</option>
-                            <option value="el_mashaya">منفذ المشاية</option>
-                            <option value="samannoud">منفذ سمنود</option>
-                        </select>
+
+                <!-- 2. تحديد اسم وتارجت الصنف الخاص -->
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-purple-800">
+                    <div class="border-b pb-2">
+                        <h2 class="text-base sm:text-lg font-bold text-purple-900">📦 إدارة اسم وتارجت الصنف الخاص</h2>
+                        <p class="text-xs text-gray-500 mt-1">اختر الفرع وعدّل اسم الصنف وتارجته الشهري.</p>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-purple-900 mb-1">اسم الصنف للفرع</label>
-                        <input type="text" id="specialItemNameInput" placeholder="مثال: معمول" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-purple-900 mb-1">تارجت الصنف الشهري (EGP)</label>
-                        <input type="number" id="specialItemTargetInput" placeholder="30000" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
-                    </div>
-                    <div class="sm:col-span-3">
-                        <button onclick="saveSpecialItemSettings()" class="w-full bg-purple-800 hover:bg-purple-900 text-white py-2.5 rounded-lg font-bold transition text-sm shadow">حفظ اسم وتارجت صنف هذا الفرع 🎯</button>
+                    <div class="space-y-3 bg-purple-50 p-4 rounded-xl border border-purple-100">
+                        <div>
+                            <label class="block text-xs font-bold text-purple-900 mb-1">اختر الفرع المستهدف</label>
+                            <select id="adminTargetBranchSelect" onchange="onAdminBranchSelectChange()" class="w-full px-3 py-2 border rounded-lg text-sm bg-white font-semibold">
+                                <option value="mubarak">منفذ مبارك</option>
+                                <option value="el_mashaya">منفذ المشاية</option>
+                                <option value="samannoud">منفذ سمنود</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-900 mb-1">اسم الصنف للفرع</label>
+                            <input type="text" id="specialItemNameInput" placeholder="مثال: معمول" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-900 mb-1">تارجت الصنف الشهري (EGP)</label>
+                            <input type="number" id="specialItemTargetInput" placeholder="30000" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                        </div>
+                        <div class="pt-2">
+                            <button onclick="saveSpecialItemSettings()" class="w-full bg-purple-800 hover:bg-purple-900 text-white py-2.5 rounded-lg font-bold transition text-sm shadow">حفظ اسم وتارجت صنف هذا الفرع 🎯</button>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- جدول مقارنة الفروع الثلاثة بالشهر الحالي -->
@@ -175,10 +232,10 @@
                 </div>
             </div>
 
-            <!-- قسم إحصائيات السنة وتحديد تارجت كل شهر ولكل فرع -->
+            <!-- قسم إحصائيات السنة وجدول الشهور -->
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-blue-800">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-3">
-                    <h2 class="text-base sm:text-lg font-bold text-blue-900">📅 إحصائيات السنة وتحديد تارجت الفروع الشهري</h2>
+                    <h2 class="text-base sm:text-lg font-bold text-blue-900">📅 إحصائيات السنة وتارجت الشهور</h2>
                     <div class="flex flex-wrap items-center gap-3">
                         <div class="flex items-center gap-1">
                             <label class="text-xs font-semibold text-gray-600">السنة:</label>
@@ -198,8 +255,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <p class="text-xs text-gray-500">اختر الفرع والسنة بالأعلى، ثم اضغط على (تعديل تارجت الشهر 🎯) لتحديد المستهدف المالي لكل شهر بدقة.</p>
 
                 <!-- جدول الشهور الـ 12 للفرع المختار -->
                 <div class="overflow-x-auto">
@@ -210,7 +265,7 @@
                                 <th class="p-3">إجمالي مبيعات الفرع (EGP)</th>
                                 <th class="p-3">تارجت الشهر للفرع (EGP)</th>
                                 <th class="p-3">نسبة الإنجاز الشهري</th>
-                                <th class="p-3 text-center">إجراء (تحديد تارجت الشهر)</th>
+                                <th class="p-3 text-center">إجراء (تعديل سريع للتارجت)</th>
                             </tr>
                         </thead>
                         <tbody id="yearlyStatsTableBody" class="text-xs sm:text-sm"></tbody>
@@ -320,13 +375,11 @@
             document.getElementById('userInfoBadge').innerText = currentUser.name;
 
             if (currentUser.role === 'admin') {
-                // المدير العام: نخفي أزرار إدخال المبيعات اليومية ونظهر له صندوق تعديل التارجت والأصناف
                 document.getElementById('salesEntryContainer').classList.add('hidden');
-                document.getElementById('adminSpecialTargetBox').classList.remove('hidden');
+                document.getElementById('adminTargetsControlBox').classList.remove('hidden');
             } else {
-                // مسؤول الفرع: نُظهر له أدوات الإدخال الخاصة بفرعه فقط
                 document.getElementById('salesEntryContainer').classList.remove('hidden');
-                document.getElementById('adminSpecialTargetBox').classList.add('hidden');
+                document.getElementById('adminTargetsControlBox').classList.add('hidden');
             }
 
             fetchDataFromFirebase();
@@ -488,7 +541,7 @@
                 let mPercentage = mTarget > 0 ? ((mSales / mTarget) * 100).toFixed(1) : 0;
 
                 let actionButton = currentUser.role === 'admin' 
-                    ? `<button onclick="setMonthBranchTarget('${targetMapKey}', '${monthsNames[i]}', '${selectedYear}')" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition">تعديل تارجت الشهر 🎯</button>`
+                    ? `<button onclick="setMonthBranchTargetFromTable('${targetMapKey}', '${monthsNames[i]}', '${selectedYear}', '${selectedBranchKey}')" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-1 rounded text-xs font-bold transition">تعديل التارجت 🎯</button>`
                     : `<span class="text-gray-400 text-xs">للمدير فقط</span>`;
 
                 yearlyTbody.innerHTML += `
@@ -507,11 +560,35 @@
             }
         }
 
-        async function setMonthBranchTarget(targetMapKey, monthName, year) {
+        async function saveAdminMonthTarget() {
+            let branchKey = document.getElementById('adminMonthTargetBranch').value;
+            let year = document.getElementById('adminTargetYear').value;
+            let month = document.getElementById('adminTargetMonth').value;
+            let targetVal = Number(document.getElementById('adminMonthTargetValueInput').value) || 0;
+
+            let targetMapKey = `${year}-${month}_${branchKey}`;
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v8");
+                let docSnap = await docRef.get();
+                let data = docSnap.exists ? docSnap.data() : getDefaultData();
+
+                if(!data.monthlyBranchTargets) data.monthlyBranchTargets = {};
+                data.monthlyBranchTargets[targetMapKey] = targetVal;
+
+                await docRef.set(data, { merge: true });
+                alert('تم حفظ وتحديث تارجت الشهر للفرع بنجاح!');
+                document.getElementById('adminMonthTargetValueInput').value = '';
+                fetchDataFromFirebase();
+            } catch (error) {
+                console.error("خطأ في حفظ تارجت الفرع:", error);
+                alert('حدث خطأ أثناء الحفظ.');
+            }
+        }
+
+        async function setMonthBranchTargetFromTable(targetMapKey, monthName, year, branchKey) {
             let currentVal = (globalStoreData.monthlyBranchTargets && globalStoreData.monthlyBranchTargets[targetMapKey]) || '';
-            let branchName = document.getElementById('selectedYearBranchSelect').options[document.getElementById('selectedYearBranchSelect').selectedIndex].text;
-            
-            let newTarget = prompt(`أدخل التارجت المستهدف لـ (${branchName}) في شهر ${monthName} سنة ${year}:`, currentVal);
+            let newTarget = prompt(`أدخل التارجت المستهدف لشهر ${monthName} سنة ${year}:`, currentVal);
             if(newTarget === null) return;
             let targetNum = Number(newTarget);
 
@@ -524,10 +601,10 @@
                 data.monthlyBranchTargets[targetMapKey] = targetNum;
 
                 await docRef.set(data, { merge: true });
-                alert('تم تحديث تارجت الشهر للفرع بنجاح!');
+                alert('تم تحديث تارجت الشهر بنجاح!');
                 fetchDataFromFirebase();
             } catch (error) {
-                console.error("خطأ في حفظ تارجت الفرع:", error);
+                console.error("خطأ:", error);
                 alert('حدث خطأ أثناء الحفظ.');
             }
         }
@@ -716,7 +793,7 @@
                 let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
                 if(existingLogIndex >= 0) {
                     data.branches[targetBranchKey].dailyLogs[existingLogIndex].specialItemAmount = specialSalesInput;
-                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
+                    data.branches[targetBranchKey].dailyLogs[existingLogKey].addedBy = currentUser.name;
                 } else {
                     data.branches[targetBranchKey].dailyLogs.push({
                         date: inputDate,
