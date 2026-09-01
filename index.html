@@ -66,12 +66,12 @@
                     <h3 id="totalMonthlySales" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-blue-600">
-                    <p class="text-xs sm:text-sm text-gray-500">إجمالي التارجت العام</p>
+                    <p class="text-xs sm:text-sm text-gray-500">إجمالي تارجت الشهر العام</p>
                     <h3 id="totalMonthlyTarget" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-purple-600">
-                    <p class="text-xs sm:text-sm text-gray-500">إجمالي مبيعات الصنف الخاص</p>
-                    <h3 id="totalSpecialItemSales" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
+                    <p class="text-xs sm:text-sm text-gray-500">إجمالي تارجت الصنف الخاص</p>
+                    <h3 id="totalSpecialItemTarget" class="text-xl sm:text-2xl font-bold text-gray-800 mt-1">0 EGP</h3>
                 </div>
             </div>
 
@@ -92,44 +92,68 @@
                 </div>
             </div>
 
-            <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4">
-                <h2 id="controlPanelTitle" class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">تسجيل المبيعات اليومية</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div id="branchSelectWrapper" class="hidden">
-                        <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع</label>
-                        <select id="targetBranchSelect" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
-                            <option value="mubarak">منفذ مبارك</option>
-                            <option value="el_mashaya">منفذ المشاية</option>
-                            <option value="samannoud">منفذ سمنود</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs sm:text-sm font-medium text-gray-700">تاريخ اليوم</label>
-                        <input type="date" id="inputDate" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs sm:text-sm font-medium text-gray-700">مبيعات اليوم العامة</label>
-                        <input type="number" id="inputDailySales" placeholder="الإجمالي اليومي" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
-                    </div>
-                    <div>
-                        <label id="specialItemLabel" class="block text-xs sm:text-sm font-medium text-purple-800 font-bold">مبيعات الصنف الخاص</label>
-                        <input type="number" id="inputSpecialItemSales" placeholder="مبيعات الصنف اليوم" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
-                    </div>
-                    <div id="targetInputWrapper" class="hidden">
-                        <label class="block text-xs sm:text-sm font-medium text-gray-700">التارجت الشهري للفرع</label>
-                        <input type="number" id="inputMonthlyTarget" placeholder="التارجت العام" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
-                    </div>
-                    <div class="flex items-end">
-                        <button onclick="saveDailySaleRecord()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg font-semibold transition text-sm">حفظ السجل</button>
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-amber-600">
+                    <h2 id="dailyControlTitle" class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">📅 تسجيل مبيعات اليوم العامة</h2>
+                    
+                    <div class="space-y-3">
+                        <div id="branchSelectWrapper" class="hidden">
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع</label>
+                            <select id="targetBranchSelect" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
+                                <option value="mubarak">منفذ مبارك</option>
+                                <option value="el_mashaya">منفذ المشاية</option>
+                                <option value="samannoud">منفذ سمنود</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700">تاريخ اليوم</label>
+                            <input type="date" id="inputDate" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700">مبيعات اليوم العامة (EGP)</label>
+                            <input type="number" id="inputDailySales" placeholder="أدخل إجمالي مبيعات اليوم" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
+                        </div>
+                        <div id="targetInputWrapper" class="hidden">
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700">التارجت الشهري العام للفرع</label>
+                            <input type="number" id="inputMonthlyTarget" placeholder="التارجت الشهري" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 text-sm">
+                        </div>
+                        <button onclick="saveDailySaleRecord()" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg font-semibold transition text-sm shadow">حفظ مبيعات اليوم 💾</button>
                     </div>
                 </div>
+
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-purple-600">
+                    <h2 class="text-base sm:text-lg font-bold text-purple-900 border-b pb-2">📦 تسجيل مبيعات الصنف الخاص</h2>
+                    
+                    <div class="space-y-3">
+                        <div id="branchSelectWrapperSpecial" class="hidden">
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700">اختر الفرع للصنف</label>
+                            <select id="targetBranchSelectSpecial" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
+                                <option value="mubarak">منفذ مبارك</option>
+                                <option value="el_mashaya">منفذ المشاية</option>
+                                <option value="samannoud">منفذ سمنود</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-medium text-gray-700">تاريخ اليوم للصنف</label>
+                            <input type="date" id="inputDateSpecial" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
+                        </div>
+                        <div>
+                            <label id="specialItemLabel" class="block text-xs sm:text-sm font-medium text-purple-800 font-bold">مبيعات الصنف الخاص اليوم</label>
+                            <input type="number" id="inputSpecialItemSales" placeholder="أدخل كمية أو مبيعات الصنف اليوم" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm">
+                        </div>
+                        <div class="pt-6">
+                            <button onclick="saveSpecialSaleRecord()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-lg font-semibold transition text-sm shadow">حفظ مبيعات الصنف الخاص 💾</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-2">
                     <h2 class="text-base sm:text-lg font-bold text-amber-900">📊 تفاصيل أداء المنافذ والأصناف الخاصة</h2>
-                    <p class="text-xs text-gray-500">اضغط على عرض السجل لمتابعة الـ 30 يوم</p>
+                    <p class="text-xs text-gray-500">اضغط على عرض السجل لمتابعة التفاصيل اليومية</p>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right border-collapse min-w-[700px]">
@@ -202,8 +226,8 @@
 
         window.onload = function() {
             const today = new Date().toISOString().split('T')[0];
-            const dateInput = document.getElementById('inputDate');
-            if(dateInput) dateInput.value = today;
+            if(document.getElementById('inputDate')) document.getElementById('inputDate').value = today;
+            if(document.getElementById('inputDateSpecial')) document.getElementById('inputDateSpecial').value = today;
 
             const savedUser = localStorage.getItem('tahstore_current_user');
             if (savedUser) {
@@ -246,13 +270,13 @@
             if (currentUser.role === 'admin') {
                 document.getElementById('adminSpecialItemControl').classList.remove('hidden');
                 document.getElementById('branchSelectWrapper').classList.remove('hidden');
+                document.getElementById('branchSelectWrapperSpecial').classList.remove('hidden');
                 document.getElementById('targetInputWrapper').classList.remove('hidden');
-                document.getElementById('controlPanelTitle').innerText = "تسجيل مبيعات لأي فرع (لوحة المدير العام)";
             } else {
                 document.getElementById('adminSpecialItemControl').classList.add('hidden');
                 document.getElementById('branchSelectWrapper').classList.add('hidden');
+                document.getElementById('branchSelectWrapperSpecial').classList.add('hidden');
                 document.getElementById('targetInputWrapper').classList.add('hidden');
-                document.getElementById('controlPanelTitle').innerText = `تسجيل مبيعات يومية لـ (${currentUser.name})`;
             }
 
             fetchDataFromFirebase();
@@ -292,7 +316,7 @@
             const branches = data.branches || {};
             const specialItem = data.specialItem || { name: "صنف مميز", target: 0 };
 
-            document.getElementById('specialItemLabel').innerText = `مبيعات (${specialItem.name})`;
+            document.getElementById('specialItemLabel').innerText = `مبيعات (${specialItem.name}) اليوم`;
             document.getElementById('tableHeaderSpecialItem').innerText = `مبيعات (${specialItem.name})`;
             document.getElementById('detailsSpecialHeader').innerText = `مبيعات (${specialItem.name})`;
             
@@ -364,7 +388,7 @@
             document.getElementById('totalDailySales').innerText = totalDailyToday + ' EGP';
             document.getElementById('totalMonthlySales').innerText = totalMonthly + ' EGP';
             document.getElementById('totalMonthlyTarget').innerText = totalTargetVal + ' EGP';
-            document.getElementById('totalSpecialItemSales').innerText = totalSpecialSalesAll + ' EGP';
+            document.getElementById('totalSpecialItemTarget').innerText = (specialItem.target || 0) + ' EGP';
         }
 
         async function saveSpecialItemSettings() {
@@ -386,7 +410,7 @@
                 fetchDataFromFirebase();
             } catch (error) {
                 console.error("خطأ في حفظ الصنف:", error);
-                alert('حدث خطأ أثناء حفظ بيانات الصنف.');
+                alert('حدث خطأ أثناء حفظ بيانات الصنف، تأكد من اتصال الإنترنت وقواعد الـ Firestore.');
             }
         }
 
@@ -422,6 +446,7 @@
             document.getElementById('branchDetailsSection').classList.add('hidden');
         }
 
+        // حفظ مبيعات اليوم العامة وحدها
         async function saveDailySaleRecord() {
             let targetBranchKey = currentUser.role === 'admin' 
                 ? document.getElementById('targetBranchSelect').value 
@@ -429,7 +454,6 @@
 
             let inputDate = document.getElementById('inputDate').value;
             let dailySalesInput = Number(document.getElementById('inputDailySales').value) || 0;
-            let specialSalesInput = Number(document.getElementById('inputSpecialItemSales').value) || 0;
             let targetInput = currentUser.role === 'admin' 
                 ? Number(document.getElementById('inputMonthlyTarget').value) || 0 
                 : 0;
@@ -452,13 +476,12 @@
                 let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
                 if(existingLogIndex >= 0) {
                     data.branches[targetBranchKey].dailyLogs[existingLogIndex].amount = dailySalesInput;
-                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].specialItemAmount = specialSalesInput;
                     data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
                 } else {
                     data.branches[targetBranchKey].dailyLogs.push({
                         date: inputDate,
                         amount: dailySalesInput,
-                        specialItemAmount: specialSalesInput,
+                        specialItemAmount: 0,
                         addedBy: currentUser.name
                     });
                 }
@@ -468,17 +491,60 @@
                 }
 
                 await docRef.set(data, { merge: true });
-                alert('تم حفظ السجل اليومي ومبيعات الصنف الخاص بنجاح على Firebase!');
-                
+                alert('تم حفظ مبيعات اليوم العامة بنجاح!');
                 document.getElementById('inputDailySales').value = '';
-                document.getElementById('inputSpecialItemSales').value = '';
-                if(currentUser.role === 'admin') {
-                    document.getElementById('inputMonthlyTarget').value = '';
-                }
+                if(currentUser.role === 'admin') document.getElementById('inputMonthlyTarget').value = '';
                 fetchDataFromFirebase();
             } catch (error) {
                 console.error("خطأ أثناء الحفظ:", error);
-                alert('حدث خطأ أثناء الحفظ، تأكد من اتصال الإنترنت وصلاحيات قاعدة البيانات.');
+                alert('حدث خطأ أثناء الحفظ، تأكد من قواعد الـ Firestore (Rules).');
+            }
+        }
+
+        // حفظ مبيعات الصنف الخاص وحدها
+        async function saveSpecialSaleRecord() {
+            let targetBranchKey = currentUser.role === 'admin' 
+                ? document.getElementById('targetBranchSelectSpecial').value 
+                : currentUser.branch;
+
+            let inputDate = document.getElementById('inputDateSpecial').value;
+            let specialSalesInput = Number(document.getElementById('inputSpecialItemSales').value) || 0;
+
+            if(!inputDate) {
+                alert('يرجى اختيار تاريخ الصنف أولاً!');
+                return;
+            }
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v4");
+                let docSnap = await docRef.get();
+                let data = docSnap.exists ? docSnap.data() : getDefaultData();
+
+                if (!data.branches) data.branches = getDefaultData().branches;
+                if(!data.branches[targetBranchKey].dailyLogs) {
+                    data.branches[targetBranchKey].dailyLogs = [];
+                }
+
+                let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
+                if(existingLogIndex >= 0) {
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].specialItemAmount = specialSalesInput;
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
+                } else {
+                    data.branches[targetBranchKey].dailyLogs.push({
+                        date: inputDate,
+                        amount: 0,
+                        specialItemAmount: specialSalesInput,
+                        addedBy: currentUser.name
+                    });
+                }
+
+                await docRef.set(data, { merge: true });
+                alert('تم حفظ مبيعات الصنف الخاص بنجاح!');
+                document.getElementById('inputSpecialItemSales').value = '';
+                fetchDataFromFirebase();
+            } catch (error) {
+                console.error("خطأ أثناء حفظ الصنف:", error);
+                alert('حدث خطأ أثناء الحفظ، تأكد من قواعد الـ Firestore (Rules).');
             }
         }
     </script>
