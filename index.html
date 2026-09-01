@@ -162,7 +162,6 @@
         let currentUser = null;
         let globalStoreData = null;
 
-        // ضبط تاريخ اليوم افتراضياً في حقل التاريخ
         window.onload = function() {
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('inputDate');
@@ -216,6 +215,7 @@
                 let data = docSnap.exists ? docSnap.data() : null;
                 if (!data || !data.branches) {
                     data = getDefaultData();
+                    // استخدام merge لضمان عدم مسح البيانات القديمة الموجودة مسبقاً في الدوكيومنت
                     await docRef.set(data, { merge: true });
                 }
                 globalStoreData = data;
@@ -230,15 +230,15 @@
         function getDefaultData() {
             return {
                 branches: {
-                    mubarak: { name: "منفذ مبارك", monthlySales: 0, target: 450000, dailyLogs: [] },
-                    el_mashaya: { name: "منفذ المشاية", monthlySales: 0, target: 400000, dailyLogs: [] },
-                    samannoud: { name: "منفذ سمنود", monthlySales: 0, target: 350000, dailyLogs: [] }
+                    mubarak: { name: "منفذ مبارك", target: 450000, dailyLogs: [] },
+                    el_mashaya: { name: "منفذ المشاية", target: 400000, dailyLogs: [] },
+                    samannoud: { name: "منفذ سمنود", target: 350000, dailyLogs: [] }
                 }
             };
         }
 
         function renderDashboardData(data) {
-            const branches = data.branches;
+            const branches = data.branches || {};
             let tbody = document.getElementById('branchesTableBody');
             tbody.innerHTML = '';
 
@@ -251,7 +251,6 @@
                 let b = branches[key];
                 if(!b.dailyLogs) b.dailyLogs = [];
 
-                // حساب مبيعات اليوم الحالي وتجميع مبيعات الشهر
                 let todaySale = 0;
                 let calculatedMonthly = 0;
                 b.dailyLogs.forEach(log => {
@@ -261,18 +260,18 @@
                     }
                 });
 
-                b.monthlySales = calculatedMonthly; // تحديث الإجمالي التراكمي
-                let percentage = b.target > 0 ? ((b.monthlySales / b.target) * 100).toFixed(1) : 0;
+                let branchMonthly = calculatedMonthly;
+                let percentage = b.target > 0 ? ((branchMonthly / b.target) * 100).toFixed(1) : 0;
                 
                 totalDailyToday += todaySale;
-                totalMonthly += b.monthlySales;
+                totalMonthly += branchMonthly;
                 totalTargetVal += Number(b.target || 0);
 
                 tbody.innerHTML += `
                     <tr class="border-b hover:bg-gray-50">
-                        <td class="p-3 font-semibold text-amber-900">${b.name}</td>
+                        <td class="p-3 font-semibold text-amber-900">${b.name || key}</td>
                         <td class="p-3 text-gray-600">${getManagerName(key)}</td>
-                        <td class="p-3 text-green-700 font-bold">${b.monthlySales} EGP</td>
+                        <td class="p-3 text-green-700 font-bold">${branchMonthly} EGP</td>
                         <td class="p-3 text-blue-700">${b.target || 0} EGP</td>
                         <td class="p-3">
                             <span class="px-2 py-1 rounded text-xs font-bold ${percentage >= 100 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">
@@ -303,10 +302,9 @@
             return "غير محدد";
         }
 
-        // عرض تفاصيل الـ 30 يوم للفرع عند الضغط عليه
         function viewBranchDetails(branchKey) {
             const branch = globalStoreData.branches[branchKey];
-            document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام (من 1 إلى 31) - ${branch.name}`;
+            document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام (من 1 إلى 31) - ${branch.name || branchKey}`;
             
             let detailsTbody = document.getElementById('dailyRecordsTableBody');
             detailsTbody.innerHTML = '';
@@ -314,10 +312,9 @@
             if(!branch.dailyLogs || branch.dailyLogs.length === 0) {
                 detailsTbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-gray-500">لا توجد مبيعات مسجلة لهذا الفرع بعد.</td></tr>`;
             } else {
-                // ترتيب السجلات حسب التاريخ تنازلياً أو تصاعدياً
                 branch.dailyLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
-                branch.dailyLogs.forEach((log, index) => {
+                branch.dailyLogs.forEach((log) => {
                     detailsTbody.innerHTML += `
                         <tr class="border-b hover:bg-gray-50">
                             <td class="p-3 font-medium text-gray-800">📅 ${log.date}</td>
@@ -336,7 +333,6 @@
             document.getElementById('branchDetailsSection').classList.add('hidden');
         }
 
-        // حفظ سجل مبيعات اليوم وتاريخه في Firebase
         async function saveDailySaleRecord() {
             let inputDate = document.getElementById('inputDate').value;
             let dailySalesInput = Number(document.getElementById('inputDailySales').value) || 0;
@@ -358,15 +354,13 @@
                 if (currentUser.role === 'branch') {
                     targetBranchKey = currentUser.branch;
                 } else if (currentUser.role === 'admin') {
-                    // المدير العام يمكنه الاختيار أو إضافتها لفرع مبارك كمثال، أو سنترك المدير يختار الفرع لو أردت، لكن افتراضياً الفروع مستقلة
-                    targetBranchKey = 'samannoud'; // مثال لو المدير بيسجل
+                    targetBranchKey = 'samannoud'; // فرع افتراضي للمدير العام في حال الإضافة السريعة
                 }
 
                 if(!data.branches[targetBranchKey].dailyLogs) {
                     data.branches[targetBranchKey].dailyLogs = [];
                 }
 
-                // إضافة السجل الجديد أو تحديثه إذا كان نفس التاريخ موجود مسبقاً
                 let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
                 if(existingLogIndex >= 0) {
                     data.branches[targetBranchKey].dailyLogs[existingLogIndex].amount = dailySalesInput;
@@ -383,15 +377,19 @@
                     data.branches[targetBranchKey].target = targetInput;
                 }
 
+                // استخدام { merge: true } للحفاظ على الحقول القديمة وعدم مسحها
                 await docRef.set(data, { merge: true });
-                alert('تم حفظ السجل اليومي وتحديث إجمالي الشهر والتارجت بنجاح على Firebase!');
+                alert('تم حفظ السجل اليومي وتحديث البيانات بنجاح على Firebase!');
                 
                 document.getElementById('inputDailySales').value = '';
                 document.getElementById('inputMonthlyTarget').value = '';
                 fetchDataFromFirebase();
+            }, error => {
+                console.error("خطأ أثناء الحفظ:", error);
+                alert('حدث خطأ أثناء الحفظ، تأكد من اتصال الإنترنت وصلاحيات قاعدة البيانات.');
             } catch (error) {
                 console.error("خطأ أثناء الحفظ:", error);
-                alert('حدث خطأ أثناء الحفظ، تأكد من اتصال الإنترنت.');
+                alert('حدث خطأ أثناء الحفظ، تأكد من اتصال الإنترنت وصلاحيات قاعدة البيانات.');
             }
         }
     </script>
