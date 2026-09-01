@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام إدارة منافذ بيع تمور الطحان</title>
+    <!-- Tailwind CSS للتصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -14,6 +16,7 @@
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen">
 
+    <!-- شاشة تسجيل الدخول -->
     <div id="loginSection" class="flex items-center justify-center min-h-screen bg-amber-50 p-4">
         <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md border border-amber-200">
             <div class="text-center mb-6">
@@ -33,16 +36,18 @@
                 <p id="loginError" class="text-red-500 text-xs text-center hidden mt-2">اسم المستخدم أو كلمة المرور غير صحيحة!</p>
             </form>
             <div class="mt-6 text-xs text-gray-400 text-center bg-gray-50 p-3 rounded-lg border">
-                <p class="font-bold text-gray-600 mb-1">بيانات الدخول التجريبية:</p>
-                <p>المدير العام: <span class="text-amber-800">MohamedHassan</span> / <span class="text-amber-800">1212</span></p>
-                <p>منفذ مبارك: <span class="text-amber-800">ahmedemad</span> / <span class="text-amber-800">3212</span></p>
-                <p>منفذ المشاية: <span class="text-amber-800">ahmedmostafa</span> / <span class="text-amber-800">4565</span></p>
-                <p>منفذ سمنود: <span class="text-amber-800">ahmedgalal</span> / <span class="text-amber-800">7898</span></p>
+                <p class="font-bold text-gray-600 mb-1">أسماء المستخدمين المتاحة:</p>
+                <p>المدير العام: <span class="text-amber-800 font-bold">MohamedHassan</span></p>
+                <p>منفذ مبارك: <span class="text-amber-800 font-bold">ahmedemad</span></p>
+                <p>منفذ المشاية: <span class="text-amber-800 font-bold">ahmedmostafa</span></p>
+                <p>منفذ سمنود: <span class="text-amber-800 font-bold">ahmedgalal</span></p>
             </div>
         </div>
     </div>
 
+    <!-- لوحة التحكم الرئيسية -->
     <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
+        <!-- شريط علوي -->
         <header class="bg-amber-900 text-white shadow-md p-4 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center space-x-3 space-x-reverse">
                 <span class="text-2xl">🌴</span>
@@ -54,8 +59,10 @@
             </div>
         </header>
 
+        <!-- المحتوى الرئيسي -->
         <main class="flex-1 p-4 sm:p-6 max-w-7xl mx-auto w-full space-y-6">
             
+            <!-- إحصائيات عامة -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-4 sm:p-5 rounded-xl shadow border-r-4 border-amber-600">
                     <p class="text-xs sm:text-sm text-gray-500">إجمالي مبيعات الفروع اليوم</p>
@@ -75,6 +82,7 @@
                 </div>
             </div>
 
+            <!-- إعدادات الصنف الخاص (للمدير العام فقط) -->
             <div id="adminSpecialItemControl" class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border border-amber-200 hidden">
                 <h2 class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">🎯 إعدادات الصنف وتارجت الصنف الخاص (للمدير العام)</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -92,8 +100,10 @@
                 </div>
             </div>
 
+            <!-- أقسام إدخال المبيعات اليومية -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
+                <!-- 1. تسجيل المبيعات اليومية العامة -->
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-amber-600">
                     <h2 class="text-base sm:text-lg font-bold text-amber-900 border-b pb-2">📅 تسجيل مبيعات اليوم العامة</h2>
                     <div class="space-y-3">
@@ -119,6 +129,7 @@
                     </div>
                 </div>
 
+                <!-- 2. تسجيل مبيعات الصنف الخاص -->
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-purple-600">
                     <h2 class="text-base sm:text-lg font-bold text-purple-900 border-b pb-2">📦 تسجيل مبيعات الصنف الخاص</h2>
                     <div class="space-y-3">
@@ -146,6 +157,7 @@
 
             </div>
 
+            <!-- جدول مقارنة الفروع الثلاثة بالشهر الحالي -->
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-2">
                     <h2 class="text-base sm:text-lg font-bold text-amber-900">📊 تفاصيل أداء المنافذ والأصناف الخاصة (الشهر الحالي)</h2>
@@ -168,6 +180,7 @@
                 </div>
             </div>
 
+            <!-- قسم إحصائيات السنة وتحديد تارجت كل شهر ولكل فرع -->
             <div class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 border-t-4 border-blue-800">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-2 gap-3">
                     <h2 class="text-base sm:text-lg font-bold text-blue-900">📅 إحصائيات السنة وتحديد تارجت الفروع الشهري</h2>
@@ -193,6 +206,7 @@
                 
                 <p class="text-xs text-gray-500">اختر الفرع والسنة بالأعلى، ثم اضغط على (تعديل تارجت الشهر 🎯) لتحديد المستهدف المالي لكل شهر بدقة.</p>
 
+                <!-- جدول الشهور الـ 12 للفرع المختار -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-right border-collapse min-w-[650px]">
                         <thead>
@@ -209,6 +223,7 @@
                 </div>
             </div>
 
+            <!-- قسم عرض تفاصيل الـ 30 يوم للفرع المحدد -->
             <div id="branchDetailsSection" class="bg-white p-4 sm:p-6 rounded-xl shadow space-y-4 hidden">
                 <div class="flex justify-between items-center border-b pb-2">
                     <h2 id="detailsBranchTitle" class="text-base sm:text-lg font-bold text-amber-900">سجل مبيعات الأيام</h2>
@@ -350,7 +365,7 @@
         function getDefaultData() {
             return {
                 specialItem: { name: "صنف مميز", target: 50000 },
-                monthlyBranchTargets: {}, // لتخزين { "2026-03_mubarak": 50000 }
+                monthlyBranchTargets: {},
                 branches: {
                     mubarak: { name: "منفذ مبارك", dailyLogs: [] },
                     el_mashaya: { name: "منفذ المشاية", dailyLogs: [] },
@@ -380,7 +395,7 @@
             let totalMonthly = 0;
             let totalTargetVal = 0;
             const todayStr = new Date().toISOString().split('T')[0];
-            const currentMonthPrefix = todayStr.substring(0, 7); // YYYY-MM
+            const currentMonthPrefix = todayStr.substring(0, 7);
 
             for (let key in branches) {
                 let b = branches[key];
@@ -400,7 +415,6 @@
                     }
                 });
 
-                // جلب تارجت الشهر الحالي لهذا الفرع
                 let currentMonthTargetKey = `${currentMonthPrefix}_${key}`;
                 let branchCurrentMonthTarget = Number(monthlyBranchTargets[currentMonthTargetKey]) || 0;
 
@@ -444,7 +458,6 @@
             document.getElementById('totalSpecialItemTarget').innerText = (specialItem.target || 0) + ' EGP';
         }
 
-        // عرض إحصائيات السنة وتحديد تارجت كل شهر حسب الفرع المحدد
         function renderYearStats() {
             if(!globalStoreData) return;
             const selectedYear = document.getElementById('selectedYearSelect').value;
@@ -498,7 +511,6 @@
             }
         }
 
-        // تحديد تارجت شهر معين لفرع معين (للمدير العام)
         async function setMonthBranchTarget(targetMapKey, monthName, year) {
             let currentVal = (globalStoreData.monthlyBranchTargets && globalStoreData.monthlyBranchTargets[targetMapKey]) || '';
             let branchName = document.getElementById('selectedYearBranchSelect').options[document.getElementById('selectedYearBranchSelect').selectedIndex].text;
@@ -519,4 +531,212 @@
                 alert('تم تحديث تارجت الشهر للفرع بنجاح!');
                 fetchDataFromFirebase();
             } catch (error) {
-                console
+                console.error("خطأ في حفظ تارجت الفرع:", error);
+                alert('حدث خطأ أثناء الحفظ.');
+            }
+        }
+
+        async function saveSpecialItemSettings() {
+            let itemName = document.getElementById('specialItemNameInput').value.trim();
+            let itemTarget = Number(document.getElementById('specialItemTargetInput').value) || 0;
+
+            if(!itemName) {
+                alert('يرجى كتابة اسم الصنف أولاً!');
+                return;
+            }
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v6");
+                await docRef.set({
+                    specialItem: { name: itemName, target: itemTarget }
+                }, { merge: true });
+
+                alert('تم حفظ إعدادات الصنف وتارجته بنجاح!');
+                fetchDataFromFirebase();
+            } catch (error) {
+                console.error("خطأ في حفظ الصنف:", error);
+                alert('حدث خطأ أثناء حفظ بيانات الصنف.');
+            }
+        }
+
+        function viewBranchDetails(branchKey) {
+            activeBranchKeyForDetails = branchKey;
+            const branch = globalStoreData.branches[branchKey];
+            document.getElementById('detailsBranchTitle').innerText = `سجل مبيعات الأيام - ${branch.name || branchKey}`;
+            
+            let detailsTbody = document.getElementById('dailyRecordsTableBody');
+            detailsTbody.innerHTML = '';
+
+            if(!branch.dailyLogs || branch.dailyLogs.length === 0) {
+                detailsTbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">لا توجد مبيعات مسجلة لهذا الفرع بعد.</td></tr>`;
+            } else {
+                branch.dailyLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                branch.dailyLogs.forEach((log) => {
+                    detailsTbody.innerHTML += `
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="p-3 font-medium text-gray-800">📅 ${log.date}</td>
+                            <td class="p-3 text-green-700 font-bold">${log.amount || 0} EGP</td>
+                            <td class="p-3 text-purple-700 font-bold">${log.specialItemAmount || 0} EGP</td>
+                            <td class="p-3 text-gray-500 text-xs sm:text-sm">${log.addedBy || 'مسؤول الفرع'}</td>
+                            <td class="p-3 text-center space-x-1 space-x-reverse">
+                                <button onclick="editRecord('${branchKey}', '${log.date}', ${log.amount || 0}, ${log.specialItemAmount || 0})" class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-2.5 py-1 rounded text-xs font-bold transition">تعديل ✏️</button>
+                                <button onclick="deleteRecord('${branchKey}', '${log.date}')" class="bg-red-100 text-red-800 hover:bg-red-200 px-2.5 py-1 rounded text-xs font-bold transition">حذف ❌</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('branchDetailsSection').classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function closeDetails() {
+            activeBranchKeyForDetails = null;
+            document.getElementById('branchDetailsSection').classList.add('hidden');
+        }
+
+        function editRecord(branchKey, dateStr, amount, specialAmount) {
+            if (currentUser.role !== 'admin' && currentUser.branch !== branchKey) {
+                alert('عذراً، يمكنك تعديل سجلات فرعك فقط!');
+                return;
+            }
+
+            if(currentUser.role === 'admin') {
+                document.getElementById('targetBranchSelect').value = branchKey;
+                document.getElementById('targetBranchSelectSpecial').value = branchKey;
+            }
+
+            document.getElementById('inputDate').value = dateStr;
+            document.getElementById('inputDailySales').value = amount;
+
+            document.getElementById('inputDateSpecial').value = dateStr;
+            document.getElementById('inputSpecialItemSales').value = specialAmount;
+
+            alert(`تم جلب بيانات تاريخ (${dateStr}) في خانات الإدخال بالأعلى. قم بتعديل ما تحتاجه ثم اضغط على زر حفظ.`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function deleteRecord(branchKey, dateStr) {
+            if (currentUser.role !== 'admin' && currentUser.branch !== branchKey) {
+                alert('عذراً، يمكنك حذف سجلات فرعك فقط!');
+                return;
+            }
+
+            if(!confirm(`هل أنت متأكد من حذف سجل تاريخ (${dateStr}) نهائياً؟`)) {
+                return;
+            }
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v6");
+                let docSnap = await docRef.get();
+                if (!docSnap.exists) return;
+
+                let data = docSnap.data();
+                if(data.branches && data.branches[branchKey] && data.branches[branchKey].dailyLogs) {
+                    data.branches[branchKey].dailyLogs = data.branches[branchKey].dailyLogs.filter(l => l.date !== dateStr);
+                    await docRef.set(data, { merge: true });
+                    alert('تم حذف السجل بنجاح!');
+                    fetchDataFromFirebase();
+                }
+            } catch (error) {
+                console.error("خطأ أثناء الحذف:", error);
+                alert('حدث خطأ أثناء محاولة الحذف.');
+            }
+        }
+
+        async function saveDailySaleRecord() {
+            let targetBranchKey = currentUser.role === 'admin' 
+                ? document.getElementById('targetBranchSelect').value 
+                : currentUser.branch;
+
+            let inputDate = document.getElementById('inputDate').value;
+            let dailySalesInput = Number(document.getElementById('inputDailySales').value) || 0;
+
+            if(!inputDate) {
+                alert('يرجى اختيار التاريخ أولاً!');
+                return;
+            }
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v6");
+                let docSnap = await docRef.get();
+                let data = docSnap.exists ? docSnap.data() : getDefaultData();
+
+                if (!data.branches) data.branches = getDefaultData().branches;
+                if(!data.branches[targetBranchKey].dailyLogs) {
+                    data.branches[targetBranchKey].dailyLogs = [];
+                }
+
+                let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
+                if(existingLogIndex >= 0) {
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].amount = dailySalesInput;
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
+                } else {
+                    data.branches[targetBranchKey].dailyLogs.push({
+                        date: inputDate,
+                        amount: dailySalesInput,
+                        specialItemAmount: 0,
+                        addedBy: currentUser.name
+                    });
+                }
+
+                await docRef.set(data, { merge: true });
+                alert('تم حفظ وتحديث مبيعات اليوم العامة بنجاح!');
+                document.getElementById('inputDailySales').value = '';
+                fetchDataFromFirebase();
+            } catch (error) {
+                console.error("خطأ أثناء الحفظ:", error);
+                alert('حدث خطأ أثناء الحفظ.');
+            }
+        }
+
+        async function saveSpecialSaleRecord() {
+            let targetBranchKey = currentUser.role === 'admin' 
+                ? document.getElementById('targetBranchSelectSpecial').value 
+                : currentUser.branch;
+
+            let inputDate = document.getElementById('inputDateSpecial').value;
+            let specialSalesInput = Number(document.getElementById('inputSpecialItemSales').value) || 0;
+
+            if(!inputDate) {
+                alert('يرجى اختيار تاريخ الصنف أولاً!');
+                return;
+            }
+
+            try {
+                const docRef = db.collection("store").doc("store_v_final_v6");
+                let docSnap = await docRef.get();
+                let data = docSnap.exists ? docSnap.data() : getDefaultData();
+
+                if (!data.branches) data.branches = getDefaultData().branches;
+                if(!data.branches[targetBranchKey].dailyLogs) {
+                    data.branches[targetBranchKey].dailyLogs = [];
+                }
+
+                let existingLogIndex = data.branches[targetBranchKey].dailyLogs.findIndex(l => l.date === inputDate);
+                if(existingLogIndex >= 0) {
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].specialItemAmount = specialSalesInput;
+                    data.branches[targetBranchKey].dailyLogs[existingLogIndex].addedBy = currentUser.name;
+                } else {
+                    data.branches[targetBranchKey].dailyLogs.push({
+                        date: inputDate,
+                        amount: 0,
+                        specialItemAmount: specialSalesInput,
+                        addedBy: currentUser.name
+                    });
+                }
+
+                await docRef.set(data, { merge: true });
+                alert('تم حفظ وتحديث مبيعات الصنف الخاص بنجاح!');
+                document.getElementById('inputSpecialItemSales').value = '';
+                fetchDataFromFirebase();
+            } catch (error) {
+                console.error("خطأ أثناء حفظ الصنف:", error);
+                alert('حدث خطأ أثناء الحفظ.');
+            }
+        }
+    </script>
+</body>
+</html>
